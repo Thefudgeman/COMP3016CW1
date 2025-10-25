@@ -12,6 +12,21 @@ class Player : public Entity
 		std::string characterClass;
 
 	public:
+		Player()
+		{
+
+		}
+		Player(int MaxHealth, int Strength, int Agility, int Luck) : Entity()
+		{
+			Entity::setMaxHealth(MaxHealth);
+			Entity::setStrength(Strength);
+			Entity::setAgility(Agility);
+			Entity::setLuck(Luck);
+			setStatPoints(4);
+			setLevel(1);
+			setXp(0);
+			setXpToNextLevel(100);
+		}
 		void gainXp(int xpGained)
 		{
 			xp += xpGained;

@@ -38,5 +38,11 @@
     <ClInclude Include="CharacterCreateBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlusStatButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MinusStatButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
