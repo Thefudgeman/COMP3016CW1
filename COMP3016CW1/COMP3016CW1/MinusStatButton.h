@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "Mouse.h"
 #include <SDL3/SDL_render.h>
 
@@ -49,4 +48,3 @@ public:
 		SDL_RenderTexture(renderer, texture, &srect, &drect);
 	}
 };
-#pragma once
