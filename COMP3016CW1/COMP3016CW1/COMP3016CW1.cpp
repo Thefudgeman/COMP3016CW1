@@ -137,10 +137,33 @@ void GameOver(Player* player)
 
 void Battle(Player* player)
 {
-    float fontSize = 33;
+    float fontSize = 28;
     Mouse* mouse = new Mouse();
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
+
+    ActionsBox* actionsBox = new ActionsBox();
+    actionsBox->srect.y = 0;
+    actionsBox->drect.x = 10;
+    actionsBox->drect.y = 500;
+    actionsBox->drect.w = 1260;
+    actionsBox->drect.h = 220;
+
+    GameButtons* attackButton = new GameButtons();
+    attackButton->srect.y = 0;
+    attackButton->drect.x = 170;
+    attackButton->drect.y = 550;
+
+    GameButtons* itemButton = new GameButtons();
+    itemButton->srect.y = 0;
+    itemButton->drect.x = 475;
+    itemButton->drect.y = 550;
+
+    GameButtons* runButton = new GameButtons();
+    runButton->srect.y = 0;
+    runButton->drect.x = 780;
+    runButton->drect.y = 550;
+
     bool running = true;
     bool entered = false;
 
@@ -150,6 +173,9 @@ void Battle(Player* player)
         SDL_RenderPresent(renderer);
 
         mouse->update();
+        attackButton->update(*mouse);
+        itemButton->update(*mouse);
+        runButton->update(*mouse);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -161,12 +187,56 @@ void Battle(Player* player)
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
 
+                    if (attackButton->isSelected)
+                    {
+
+                    }
+                    if (itemButton->isSelected)
+                    {
+
+                    }
+                    if (runButton->isSelected)
+                    {
+                        int random = rand() % 3;
+                        if (random == 0)
+                        {
+
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
                    
                 }
             }
         }
         SDL_RenderClear(renderer);
+        actionsBox->draw();
 
+        attackButton->draw();
+        SDL_Surface* surfaceFight = TTF_RenderText_Solid(font, "ATTACK", 7, textColour);
+        SDL_Texture* textureFight = SDL_CreateTextureFromSurface(renderer, surfaceFight);
+        SDL_FRect textRectFight = { 225,575,fontSize * 7,60 };
+        SDL_RenderTexture(renderer, textureFight, NULL, &textRectFight);
+        SDL_DestroySurface(surfaceFight);
+        SDL_DestroyTexture(textureFight);
+
+        itemButton->draw();
+        SDL_Surface* surfaceRun = TTF_RenderText_Solid(font, "ITEM", 4, textColour);
+        SDL_Texture* textureRun = SDL_CreateTextureFromSurface(renderer, surfaceRun);
+        SDL_FRect textRectRun = { 570,575,fontSize * 4,60 };
+        SDL_RenderTexture(renderer, textureRun, NULL, &textRectRun);
+        SDL_DestroySurface(surfaceRun);
+        SDL_DestroyTexture(textureRun);
+
+        runButton->draw();
+        SDL_Surface* surfaceRest = TTF_RenderText_Solid(font, "RUN", 3, textColour);
+        SDL_Texture* textureRest = SDL_CreateTextureFromSurface(renderer, surfaceRest);
+        SDL_FRect textRectRest = { 890,575,fontSize * 3,60 };
+        SDL_RenderTexture(renderer, textureRest, NULL, &textRectRest);
+        SDL_DestroySurface(surfaceRest);
+        SDL_DestroyTexture(textureRest);
 
         mouse->draw();
 
@@ -208,6 +278,13 @@ void Game(Player* player)
     restButton->drect.x = 780;
     restButton->drect.y = 550;
 
+    Button* quitButton = new Button();
+    quitButton->srect.y = 0;
+    quitButton->drect.x = 20;
+    quitButton->drect.y = 20;
+    quitButton->drect.h = 52;
+    quitButton->drect.w = 150;
+
     bool running = true;
     bool entered = false;
 
@@ -227,6 +304,7 @@ void Game(Player* player)
             runButton->update(*mouse);
             restButton->update(*mouse);
         }
+        quitButton->update(*mouse);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -276,6 +354,10 @@ void Game(Player* player)
                             player->setHealth(player->getMaxHealth());
                         }
                     }
+                    if (quitButton->isSelected)
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -318,6 +400,13 @@ void Game(Player* player)
             SDL_DestroySurface(surfaceRest);
             SDL_DestroyTexture(textureRest);
         }
+        quitButton->draw();
+        SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "QUIT", 4, textColour);
+        SDL_Texture* textureQuit = SDL_CreateTextureFromSurface(renderer, surfaceQuit);
+        SDL_FRect textRectQuit = { 65,32,fontSize * 2,32 };
+        SDL_RenderTexture(renderer, textureQuit, NULL, &textRectQuit);
+        SDL_DestroySurface(surfaceQuit);
+        SDL_DestroyTexture(textureQuit);
         mouse->draw();
 
     }
