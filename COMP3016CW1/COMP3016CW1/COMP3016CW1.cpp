@@ -12,7 +12,6 @@
 #include "GameButtons.h"
 #include "ActionsBox.h"
 
-
 void GameOver(Player* player)
 {
     float fontSize = 33;
@@ -285,8 +284,24 @@ void Game(Player* player)
     quitButton->drect.h = 52;
     quitButton->drect.w = 150;
 
+    Button* previousFloorButton = new Button();
+    previousFloorButton->srect.y = 0;
+    previousFloorButton->drect.x = 200;
+    previousFloorButton->drect.y = 20;
+    previousFloorButton->drect.h = 52;
+    previousFloorButton->drect.w = 180;
+
+    Button* nextFloorButton = new Button();
+    nextFloorButton->srect.y = 0;
+    nextFloorButton->drect.x = 400;
+    nextFloorButton->drect.y = 20;
+    nextFloorButton->drect.h = 52;
+    nextFloorButton->drect.w = 180;
+
+
     bool running = true;
     bool entered = false;
+    bool canGoToFloor = false;
 
     while (running)
     {
@@ -305,6 +320,19 @@ void Game(Player* player)
             restButton->update(*mouse);
         }
         quitButton->update(*mouse);
+
+        if (actionsOnFloorTaken >= 7)
+        {
+            canGoToFloor = true;
+        }
+        if (canGoToFloor || currentFloor < highestFloor)
+        {
+            nextFloorButton->update(*mouse);
+        }
+        if (currentFloor > 1)
+        {
+            previousFloorButton->update(*mouse);
+        }
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -332,6 +360,7 @@ void Game(Player* player)
                             {
                                 return;
                             }
+                            actionsOnFloorTaken++;
                         }
                         if (runButton->isSelected)
                         {
@@ -348,15 +377,36 @@ void Game(Player* player)
                                     return;
                                 }
                             }
+                            actionsOnFloorTaken++;
                         }
                         if (restButton->isSelected)
                         {
                             player->setHealth(player->getMaxHealth());
+                            actionsOnFloorTaken++;
+                            std::cout << actionsOnFloorTaken << std::endl;
                         }
                     }
                     if (quitButton->isSelected)
                     {
                         return;
+                    }
+                    if (nextFloorButton->isSelected)
+                    {
+                        currentFloor++;
+                        actionsOnFloorTaken = 0;
+                        std::cout << actionsOnFloorTaken << std::endl;
+                        nextFloorButton->isSelected = false;
+                        if (highestFloor < currentFloor)
+                        {
+                            highestFloor = currentFloor;
+                            canGoToFloor = false;
+                        }
+                    }
+                    if (previousFloorButton->isSelected)
+                    {
+                        currentFloor--;
+                        actionsOnFloorTaken = 0;
+                        previousFloorButton->isSelected = false;
                     }
                 }
             }
@@ -399,6 +449,26 @@ void Game(Player* player)
             SDL_RenderTexture(renderer, textureRest, NULL, &textRectRest);
             SDL_DestroySurface(surfaceRest);
             SDL_DestroyTexture(textureRest);
+        }
+        if (currentFloor > 1)
+        {
+            previousFloorButton->draw();
+            SDL_Surface* surfacePreviousFloor = TTF_RenderText_Solid(font, "PREVIOUS FLOOR", 15, textColour);
+            SDL_Texture* texturePreviousFloor = SDL_CreateTextureFromSurface(renderer, surfacePreviousFloor);
+            SDL_FRect textRectPreviousFloor = { 230,40,fontSize * 15/4, 16 };
+            SDL_RenderTexture(renderer, texturePreviousFloor, NULL, &textRectPreviousFloor);
+            SDL_DestroySurface(surfacePreviousFloor);
+            SDL_DestroyTexture(texturePreviousFloor);
+        }
+        if (canGoToFloor || currentFloor < highestFloor)
+        {
+            nextFloorButton->draw();
+            SDL_Surface* surfaceNextFloor = TTF_RenderText_Solid(font, "NEXT FLOOR", 10, textColour);
+            SDL_Texture* textureNextFloor = SDL_CreateTextureFromSurface(renderer, surfaceNextFloor);
+            SDL_FRect textRectNextFloor = { 435,35,fontSize * 10 / 3, 24 };
+            SDL_RenderTexture(renderer, textureNextFloor, NULL, &textRectNextFloor);
+            SDL_DestroySurface(surfaceNextFloor);
+            SDL_DestroyTexture(textureNextFloor);
         }
         quitButton->draw();
         SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "QUIT", 4, textColour);
