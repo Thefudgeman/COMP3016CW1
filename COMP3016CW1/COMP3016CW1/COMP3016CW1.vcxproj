@@ -133,9 +133,11 @@
     <ClCompile Include="COMP3016CW1.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionsBox.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="CharacterCreateBox.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameButtons.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="MinusStatButton.h" />
     <ClInclude Include="Mouse.h" />

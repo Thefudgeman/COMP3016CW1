@@ -19,6 +19,7 @@ class Player : public Entity
 		Player(int MaxHealth, int Strength, int Agility, int Luck) : Entity()
 		{
 			Entity::setMaxHealth(MaxHealth);
+			Entity::setHealth(MaxHealth);
 			Entity::setStrength(Strength);
 			Entity::setAgility(Agility);
 			Entity::setLuck(Luck);
@@ -75,6 +76,6 @@ class Player : public Entity
 		}
 		std::string setCharacterClass(std::string value)
 		{
-			characterClass = value;
+			return characterClass = value;
 		}
 };

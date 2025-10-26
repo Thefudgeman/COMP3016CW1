@@ -46,7 +46,6 @@ public:
 
 	void draw()
 	{
-		//SDL_SetRenderLogicalPresentation(renderer, 640, 480, SDL_LOGICAL_PRESENTATION_STRETCH);
 		SDL_RenderTexture(renderer, texture, &srect, &drect);
 	}
 };
