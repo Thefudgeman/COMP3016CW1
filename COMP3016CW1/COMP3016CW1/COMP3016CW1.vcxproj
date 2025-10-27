@@ -136,14 +136,7 @@
     <ClInclude Include="ActionsBox.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Box.h" />
-    <ClInclude Include="Demon.h" />
-    <ClInclude Include="Dragon.h" />
-    <ClInclude Include="Golbin.h" />
-    <ClInclude Include="Golem.h" />
-    <ClInclude Include="Griffin.h" />
-    <ClInclude Include="Minotaur.h" />
-    <ClInclude Include="Ogre.h" />
-    <ClInclude Include="Skeleton.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameButtons.h" />
     <ClInclude Include="Globals.h" />
@@ -151,10 +144,6 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlusStatButton.h" />
-    <ClInclude Include="Slime.h" />
-    <ClInclude Include="Vampire.h" />
-    <ClInclude Include="Wraith.h" />
-    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
