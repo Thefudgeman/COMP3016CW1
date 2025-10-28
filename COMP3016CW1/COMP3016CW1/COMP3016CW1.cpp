@@ -137,7 +137,7 @@ void GameOver(Player* player)
 }
 
 
-void Battle(Player* player)
+void Battle(Player* player, Enemy* enemy)
 {
     float fontSize = 28;
     Mouse* mouse = new Mouse();
@@ -168,153 +168,7 @@ void Battle(Player* player)
 
     bool running = true;
     bool entered = false;
-    int random = rand() % 10;
-
-    Enemy* enemy = new Enemy();
    
-    switch (currentFloor) //optimise later
-    {
-     case 1:
-         if (random < 5)
-         {
-             enemy = new Enemy(2, 1, 1, 1, 50, "Slime");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(3, 3, 1, 1, 100, "Zombie");
-         }
-         else
-         {
-             enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
-         }
-         break;
-     case 2:
-         if (random < 5)
-         {
-             enemy = new Enemy(3, 3, 1, 1, 100, "Zombie");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
-         }
-         else
-         {
-             enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
-         }
-         break;
-     case 3:
-         if (random < 5)
-         {
-             enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
-         }
-         else
-         {
-             enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
-         }
-         break;
-     case 4:
-         if (random < 5)
-         {
-             enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
-         }
-         else
-         {
-             enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
-         }
-         break;
-     case 5:
-         if (random < 5)
-         {
-             enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
-         }
-         else
-         {
-             enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
-         }
-         break;
-     case 6:
-         if (random < 5)
-         {
-             enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
-         }
-         else
-         {
-             enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
-         }
-         break;
-     case 7:
-         if (random < 5)
-         {
-             enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
-         }
-         else
-         {
-             enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
-         }
-         break;
-     case 8:
-         if (random < 5)
-         {
-             enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
-         }
-         else
-         {
-             enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
-         }
-         break;
-     case 9:
-         if (random < 5)
-         {
-             enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
-         }
-         else
-         {
-             enemy = new Enemy(25, 21, 19, 17, 1800, "Demon");
-         }
-         break;
-     case 10:
-         if (random < 5)
-         {
-             enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
-         }
-         else if (random > 4 && random < 8)
-         {
-             enemy = new Enemy(25, 21, 19, 17, 1800, "Demon");
-         }
-         else
-         {
-             enemy = new Enemy(40, 33, 21, 20, 1800, "Dragon");
-         }
-         break;
-    }
 
     while (running)
     {
@@ -452,7 +306,154 @@ void Game(Player* player)
     nextFloorButton->drect.y = 20;
     nextFloorButton->drect.h = 52;
     nextFloorButton->drect.w = 180;
+        
+    Enemy* enemy = new Enemy();
+    int random = rand() % 10;
 
+
+    switch (currentFloor) //optimise later
+    {
+    case 1:
+        if (random < 5)
+        {
+            enemy = new Enemy(2, 1, 1, 1, 50, "Slime");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(3, 3, 1, 1, 100, "Zombie");
+        }
+        else
+        {
+            enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
+        }
+        break;
+    case 2:
+        if (random < 5)
+        {
+            enemy = new Enemy(3, 3, 1, 1, 100, "Zombie");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
+        }
+        else
+        {
+            enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
+        }
+        break;
+    case 3:
+        if (random < 5)
+        {
+            enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
+        }
+        else
+        {
+            enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
+        }
+        break;
+    case 4:
+        if (random < 5)
+        {
+            enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
+        }
+        else
+        {
+            enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
+        }
+        break;
+    case 5:
+        if (random < 5)
+        {
+            enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
+        }
+        else
+        {
+            enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
+        }
+        break;
+    case 6:
+        if (random < 5)
+        {
+            enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
+        }
+        else
+        {
+            enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
+        }
+        break;
+    case 7:
+        if (random < 5)
+        {
+            enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
+        }
+        else
+        {
+            enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
+        }
+        break;
+    case 8:
+        if (random < 5)
+        {
+            enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
+        }
+        else
+        {
+            enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
+        }
+        break;
+    case 9:
+        if (random < 5)
+        {
+            enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
+        }
+        else
+        {
+            enemy = new Enemy(25, 21, 19, 17, 1800, "Demon");
+        }
+        break;
+    case 10:
+        if (random < 5)
+        {
+            enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
+        }
+        else if (random > 4 && random < 8)
+        {
+            enemy = new Enemy(25, 21, 19, 17, 1800, "Demon");
+        }
+        else
+        {
+            enemy = new Enemy(40, 33, 21, 20, 1800, "Dragon");
+        }
+        break;
+    }
 
     bool running = true;
     bool entered = false;
@@ -510,7 +511,7 @@ void Game(Player* player)
                         if (fightButton->isSelected)
                         {
                             std::cout << "fight" << std::endl;
-                            Battle(player);
+                            Battle(player, enemy);
                             if (player->getHealth() <= 0)
                             {
                                 return;
