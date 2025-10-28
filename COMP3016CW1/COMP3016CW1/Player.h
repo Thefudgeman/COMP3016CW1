@@ -5,11 +5,11 @@
 class Player : public Entity
 {
 	private:
-		int statPoints;
-		int level;
-		int xp;
-		int xpToNextLevel;
-		std::string characterClass;
+		int statPoints = 4;
+		int level = 1;
+		int xp = 0;
+		int xpToNextLevel = 100;
+		std::string characterClass = "";
 
 	public:
 		Player()
@@ -23,10 +23,6 @@ class Player : public Entity
 			Entity::setStrength(Strength);
 			Entity::setAgility(Agility);
 			Entity::setLuck(Luck);
-			setStatPoints(4);
-			setLevel(1);
-			setXp(0);
-			setXpToNextLevel(100);
 		}
 		void gainXp(int xpGained)
 		{

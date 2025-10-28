@@ -6,6 +6,8 @@ class Enemy : public Entity
 	private:
 		int giveXp = 0;
 		std::string name = "";
+		SDL_Texture* texture;
+		SDL_FRect srect, drect;
 
 	public:
 		Enemy()
@@ -21,6 +23,16 @@ class Enemy : public Entity
 			Entity::setLuck(Luck);
 			giveXp = GiveXp;
 			name = Name;
+			Name = "images/Enemies/" + Name + ".png";
+			SDL_Texture* tex = IMG_LoadTexture(renderer, Name.c_str());
+			texture = tex;
+
+			srect.h = 112;
+			srect.w = 200;
+			srect.x = 0;
+
+			drect.h = 448;
+			drect.w = 800;
 		}
 
 		int getGiveXp()
@@ -36,5 +48,10 @@ class Enemy : public Entity
 		std::string getName()
 		{
 			return name;
+		}
+
+		void draw()
+		{
+			SDL_RenderTexture(renderer, texture, &srect, &drect);
 		}
 };

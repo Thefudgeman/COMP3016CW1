@@ -220,6 +220,7 @@ void Battle(Player* player, Enemy* enemy)
             }
         }
         SDL_RenderClear(renderer);
+        enemy->draw();
         actionsBox->draw();
 
         attackButton->draw();
@@ -251,65 +252,9 @@ void Battle(Player* player, Enemy* enemy)
     }
 }
 
-
-void Game(Player* player)
+Enemy* GetEnemy(Enemy* enemy)
 {
-    float fontSize = 33;
-    Mouse* mouse = new Mouse();
-    TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
-    SDL_Color textColour = { 255,255,255,255 };
-
-    Button* enterButton = new Button();
-    enterButton->srect.y = 0;
-    enterButton->drect.x = 490;
-    enterButton->drect.y = 600;
-
-    ActionsBox* actionsBox = new ActionsBox();
-    actionsBox->srect.y = 0;
-    actionsBox->drect.x = 10;
-    actionsBox->drect.y = 500;
-    actionsBox->drect.w = 1260;
-    actionsBox->drect.h = 220;
-
-    GameButtons* fightButton = new GameButtons();
-    fightButton->srect.y = 0;
-    fightButton->drect.x = 170;
-    fightButton->drect.y = 550;
-
-    GameButtons* runButton = new GameButtons();
-    runButton->srect.y = 0;
-    runButton->drect.x = 475;
-    runButton->drect.y = 550;
-
-    GameButtons* restButton = new GameButtons();
-    restButton->srect.y = 0;
-    restButton->drect.x = 780;
-    restButton->drect.y = 550;
-
-    Button* quitButton = new Button();
-    quitButton->srect.y = 0;
-    quitButton->drect.x = 20;
-    quitButton->drect.y = 20;
-    quitButton->drect.h = 52;
-    quitButton->drect.w = 150;
-
-    Button* previousFloorButton = new Button();
-    previousFloorButton->srect.y = 0;
-    previousFloorButton->drect.x = 200;
-    previousFloorButton->drect.y = 20;
-    previousFloorButton->drect.h = 52;
-    previousFloorButton->drect.w = 180;
-
-    Button* nextFloorButton = new Button();
-    nextFloorButton->srect.y = 0;
-    nextFloorButton->drect.x = 400;
-    nextFloorButton->drect.y = 20;
-    nextFloorButton->drect.h = 52;
-    nextFloorButton->drect.w = 180;
-        
-    Enemy* enemy = new Enemy();
     int random = rand() % 10;
-
 
     switch (currentFloor) //optimise later
     {
@@ -317,6 +262,7 @@ void Game(Player* player)
         if (random < 5)
         {
             enemy = new Enemy(2, 1, 1, 1, 50, "Slime");
+
         }
         else if (random > 4 && random < 8)
         {
@@ -408,7 +354,7 @@ void Game(Player* player)
         }
         else
         {
-            enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
+            enemy = new Enemy(16, 19, 13, 10, 1000, "Vampire");
         }
         break;
     case 8:
@@ -418,7 +364,7 @@ void Game(Player* player)
         }
         else if (random > 4 && random < 8)
         {
-            enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
+            enemy = new Enemy(16, 19, 13, 10, 1000, "Vampire");
         }
         else
         {
@@ -428,7 +374,7 @@ void Game(Player* player)
     case 9:
         if (random < 5)
         {
-            enemy = new Enemy(16, 19, 13, 10, 1000, "Vamipre");
+            enemy = new Enemy(16, 19, 13, 10, 1000, "Vampire");
         }
         else if (random > 4 && random < 8)
         {
@@ -454,6 +400,69 @@ void Game(Player* player)
         }
         break;
     }
+    return enemy;
+}
+
+
+void Game(Player* player)
+{
+    float fontSize = 33;
+    Mouse* mouse = new Mouse();
+    TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
+    SDL_Color textColour = { 255,255,255,255 };
+
+    Button* enterButton = new Button();
+    enterButton->srect.y = 0;
+    enterButton->drect.x = 490;
+    enterButton->drect.y = 600;
+
+    ActionsBox* actionsBox = new ActionsBox();
+    actionsBox->srect.y = 0;
+    actionsBox->drect.x = 10;
+    actionsBox->drect.y = 500;
+    actionsBox->drect.w = 1260;
+    actionsBox->drect.h = 220;
+
+    GameButtons* fightButton = new GameButtons();
+    fightButton->srect.y = 0;
+    fightButton->drect.x = 170;
+    fightButton->drect.y = 550;
+
+    GameButtons* runButton = new GameButtons();
+    runButton->srect.y = 0;
+    runButton->drect.x = 475;
+    runButton->drect.y = 550;
+
+    GameButtons* restButton = new GameButtons();
+    restButton->srect.y = 0;
+    restButton->drect.x = 780;
+    restButton->drect.y = 550;
+
+    Button* quitButton = new Button();
+    quitButton->srect.y = 0;
+    quitButton->drect.x = 20;
+    quitButton->drect.y = 20;
+    quitButton->drect.h = 52;
+    quitButton->drect.w = 150;
+
+    Button* previousFloorButton = new Button();
+    previousFloorButton->srect.y = 0;
+    previousFloorButton->drect.x = 200;
+    previousFloorButton->drect.y = 20;
+    previousFloorButton->drect.h = 52;
+    previousFloorButton->drect.w = 180;
+
+    Button* nextFloorButton = new Button();
+    nextFloorButton->srect.y = 0;
+    nextFloorButton->drect.x = 400;
+    nextFloorButton->drect.y = 20;
+    nextFloorButton->drect.h = 52;
+    nextFloorButton->drect.w = 180;
+        
+    Enemy* enemy = new Enemy();
+    enemy = GetEnemy(enemy);
+
+    
 
     bool running = true;
     bool entered = false;
@@ -517,6 +526,8 @@ void Game(Player* player)
                                 return;
                             }
                             actionsOnFloorTaken++;
+                            enemy = GetEnemy(enemy);
+                            std::cout << enemy->getName() << std::endl;
                         }
                         if (runButton->isSelected)
                         {
@@ -534,12 +545,14 @@ void Game(Player* player)
                                 }
                             }
                             actionsOnFloorTaken++;
+                            enemy = GetEnemy(enemy);
                         }
                         if (restButton->isSelected)
                         {
                             player->setHealth(player->getMaxHealth());
                             actionsOnFloorTaken++;
                             std::cout << actionsOnFloorTaken << std::endl;
+                            enemy = GetEnemy(enemy);
                         }
                     }
                     if (quitButton->isSelected)
@@ -568,6 +581,8 @@ void Game(Player* player)
             }
         }
         SDL_RenderClear(renderer);
+
+        enemy->draw();
         if (!entered)
         {
             enterButton->draw();
