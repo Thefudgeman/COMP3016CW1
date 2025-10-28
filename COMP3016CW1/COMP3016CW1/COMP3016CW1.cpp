@@ -255,7 +255,7 @@ void Battle(Player* player, Enemy* enemy)
 Enemy* GetEnemy(Enemy* enemy)
 {
     int random = rand() % 10;
-
+    SDL_DestroyTexture(enemy->texture);
     switch (currentFloor) //optimise later
     {
     case 1:
@@ -460,6 +460,8 @@ void Game(Player* player)
     nextFloorButton->drect.w = 180;
         
     Enemy* enemy = new Enemy();
+    enemy->srect.y = 0;
+
     enemy = GetEnemy(enemy);
 
     

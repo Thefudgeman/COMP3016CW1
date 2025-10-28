@@ -6,10 +6,10 @@ class Enemy : public Entity
 	private:
 		int giveXp = 0;
 		std::string name = "";
-		SDL_Texture* texture;
-		SDL_FRect srect, drect;
 
 	public:
+		SDL_FRect srect, drect;
+		SDL_Texture* texture;
 		Enemy()
 		{
 
@@ -33,8 +33,13 @@ class Enemy : public Entity
 
 			drect.h = 448;
 			drect.w = 800;
+			drect.x = 240;
+			drect.y = 50;
 		}
+		~Enemy()
+		{
 
+		}
 		int getGiveXp()
 		{
 			return giveXp;
