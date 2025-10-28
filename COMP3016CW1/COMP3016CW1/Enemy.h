@@ -27,8 +27,8 @@ class Enemy : public Entity
 			SDL_Texture* tex = IMG_LoadTexture(renderer, Name.c_str());
 			texture = tex;
 
-			srect.h = 112;
-			srect.w = 200;
+			srect.h = 488;
+			srect.w = 800;
 			srect.x = 0;
 
 			drect.h = 448;
