@@ -12,6 +12,8 @@
 #include "GameButtons.h"
 #include "ActionsBox.h"
 #include "Enemy.h"
+#include "Entrance.h"
+#include "DungeonRoom.h"
 
 
 
@@ -143,6 +145,9 @@ void Battle(Player* player, Enemy* enemy)
     Mouse* mouse = new Mouse();
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
+    SDL_Color healthTextColour = { 255, 0, 0, 255 };
+
+    DungeonRoom* dungeonRoom = new DungeonRoom();
 
     ActionsBox* actionsBox = new ActionsBox();
     actionsBox->srect.y = 0;
@@ -168,6 +173,7 @@ void Battle(Player* player, Enemy* enemy)
 
     bool running = true;
     bool entered = false;
+    std::string health;
    
 
     while (running)
@@ -198,6 +204,10 @@ void Battle(Player* player, Enemy* enemy)
                         {
                             return;
                         }
+                        else if (player->getHealth() <= 0)
+                        {
+                            GameOver(player);
+                        }
                     }
                     if (itemButton->isSelected)
                     {
@@ -220,6 +230,7 @@ void Battle(Player* player, Enemy* enemy)
             }
         }
         SDL_RenderClear(renderer);
+        dungeonRoom->draw();
         enemy->draw();
         actionsBox->draw();
 
@@ -246,6 +257,22 @@ void Battle(Player* player, Enemy* enemy)
         SDL_RenderTexture(renderer, textureRest, NULL, &textRectRest);
         SDL_DestroySurface(surfaceRest);
         SDL_DestroyTexture(textureRest);
+
+        health = std::to_string(player->getHealth()) + "/" + std::to_string(player->getMaxHealth());
+        SDL_Surface* surfacePlayerHealth = TTF_RenderText_Solid(font, health.c_str(), health.length(), healthTextColour);
+        SDL_Texture* texturePlayerHealth = SDL_CreateTextureFromSurface(renderer, surfacePlayerHealth);
+        SDL_FRect textRectPlayerHealth = { 225,275,fontSize * health.length()/2,32};
+        SDL_RenderTexture(renderer, texturePlayerHealth, NULL, &textRectPlayerHealth);
+        SDL_DestroySurface(surfacePlayerHealth);
+        SDL_DestroyTexture(texturePlayerHealth);
+
+        health = std::to_string(enemy->getHealth()) + "/" + std::to_string(enemy->getMaxHealth());
+        SDL_Surface* surfaceEnemyHealth = TTF_RenderText_Solid(font, health.c_str(), health.length(), healthTextColour);
+        SDL_Texture* textureEnemyHealth = SDL_CreateTextureFromSurface(renderer, surfaceEnemyHealth);
+        SDL_FRect textRectEnemyHealth = { 225,100,fontSize * health.length() / 2,32 };
+        SDL_RenderTexture(renderer, textureEnemyHealth, NULL, &textRectEnemyHealth);
+        SDL_DestroySurface(surfaceEnemyHealth);
+        SDL_DestroyTexture(textureEnemyHealth);
 
         mouse->draw();
 
@@ -410,6 +437,10 @@ void Game(Player* player)
     Mouse* mouse = new Mouse();
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
+
+    Entrance* entranceImg = new Entrance();
+
+    DungeonRoom* dungeonRoom = new DungeonRoom();
 
     Button* enterButton = new Button();
     enterButton->srect.y = 0;
@@ -584,9 +615,9 @@ void Game(Player* player)
         }
         SDL_RenderClear(renderer);
 
-        enemy->draw();
         if (!entered)
         {
+            entranceImg->draw();
             enterButton->draw();
             SDL_Surface* surfaceEnter = TTF_RenderText_Solid(font, "ENTER", 5, textColour);
             SDL_Texture* textureEnter = SDL_CreateTextureFromSurface(renderer, surfaceEnter);
@@ -597,6 +628,9 @@ void Game(Player* player)
         }
         else
         {
+            dungeonRoom->draw();
+            enemy->draw();
+
             actionsBox->draw();
 
             fightButton->draw();
@@ -622,26 +656,27 @@ void Game(Player* player)
             SDL_RenderTexture(renderer, textureRest, NULL, &textRectRest);
             SDL_DestroySurface(surfaceRest);
             SDL_DestroyTexture(textureRest);
-        }
-        if (currentFloor > 1)
-        {
-            previousFloorButton->draw();
-            SDL_Surface* surfacePreviousFloor = TTF_RenderText_Solid(font, "PREVIOUS FLOOR", 15, textColour);
-            SDL_Texture* texturePreviousFloor = SDL_CreateTextureFromSurface(renderer, surfacePreviousFloor);
-            SDL_FRect textRectPreviousFloor = { 230,40,fontSize * 15/4, 16 };
-            SDL_RenderTexture(renderer, texturePreviousFloor, NULL, &textRectPreviousFloor);
-            SDL_DestroySurface(surfacePreviousFloor);
-            SDL_DestroyTexture(texturePreviousFloor);
-        }
-        if (canGoToFloor || currentFloor < highestFloor)
-        {
-            nextFloorButton->draw();
-            SDL_Surface* surfaceNextFloor = TTF_RenderText_Solid(font, "NEXT FLOOR", 10, textColour);
-            SDL_Texture* textureNextFloor = SDL_CreateTextureFromSurface(renderer, surfaceNextFloor);
-            SDL_FRect textRectNextFloor = { 435,35,fontSize * 10 / 3, 24 };
-            SDL_RenderTexture(renderer, textureNextFloor, NULL, &textRectNextFloor);
-            SDL_DestroySurface(surfaceNextFloor);
-            SDL_DestroyTexture(textureNextFloor);
+
+            if (currentFloor > 1)
+            {
+                previousFloorButton->draw();
+                SDL_Surface* surfacePreviousFloor = TTF_RenderText_Solid(font, "PREVIOUS FLOOR", 15, textColour);
+                SDL_Texture* texturePreviousFloor = SDL_CreateTextureFromSurface(renderer, surfacePreviousFloor);
+                SDL_FRect textRectPreviousFloor = { 230,40,fontSize * 15 / 4, 16 };
+                SDL_RenderTexture(renderer, texturePreviousFloor, NULL, &textRectPreviousFloor);
+                SDL_DestroySurface(surfacePreviousFloor);
+                SDL_DestroyTexture(texturePreviousFloor);
+            }
+            if (canGoToFloor || currentFloor < highestFloor)
+            {
+                nextFloorButton->draw();
+                SDL_Surface* surfaceNextFloor = TTF_RenderText_Solid(font, "NEXT FLOOR", 10, textColour);
+                SDL_Texture* textureNextFloor = SDL_CreateTextureFromSurface(renderer, surfaceNextFloor);
+                SDL_FRect textRectNextFloor = { 435,35,fontSize * 10 / 3, 24 };
+                SDL_RenderTexture(renderer, textureNextFloor, NULL, &textRectNextFloor);
+                SDL_DestroySurface(surfaceNextFloor);
+                SDL_DestroyTexture(textureNextFloor);
+            }
         }
         quitButton->draw();
         SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "QUIT", 4, textColour);
@@ -661,6 +696,8 @@ void CreateCharacterScreen()
     SDL_Color textColour = { 255,255,255,255 };
     bool allocatePoints = false;
     Player* player = new Player();
+
+    Entrance* entranceImg = new Entrance();
 
     Mouse* mouse = new Mouse();
     Button* back = new Button();
@@ -887,6 +924,7 @@ void CreateCharacterScreen()
             }
         }
         SDL_RenderClear(renderer);
+        entranceImg->draw();
         box->draw();
         back->draw();
         SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "BACK", 4, textColour);
@@ -1004,6 +1042,8 @@ int main()
     float fontSize = 33;
     Mouse* mouse = new Mouse();
 
+    Entrance* entranceImg = new Entrance();
+
     Button* start = new Button();
     start->srect.y = 0;
     start->drect.x = 100;
@@ -1058,6 +1098,7 @@ int main()
             }
         }
         SDL_RenderClear(renderer);
+        entranceImg->draw();
         start->draw();
         options->draw();
         quit->draw();

@@ -136,10 +136,12 @@
     <ClInclude Include="ActionsBox.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="DungeonRoom.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameButtons.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Entrance.h" />
     <ClInclude Include="MinusStatButton.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Player.h" />
