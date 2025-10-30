@@ -146,6 +146,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlusStatButton.h" />
+    <ClInclude Include="UIObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

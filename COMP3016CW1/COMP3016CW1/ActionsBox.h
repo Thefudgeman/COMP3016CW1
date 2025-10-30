@@ -1,14 +1,10 @@
 #pragma once
 #include "Mouse.h"
 #include <SDL3/SDL_render.h>
+#include "UIObject.h"
 
-class ActionsBox
+class ActionsBox : public UIObject
 {
-public:
-	SDL_Texture* texture;
-	SDL_FRect srect, drect;
-	bool isSelected = false;
-
 
 public:
 	ActionsBox()
@@ -24,11 +20,6 @@ public:
 		drect.w = 1260;
 	}
 
-	virtual ~ActionsBox()
-	{
-
-	}
-
 	void update(Mouse& mouse)
 	{
 		if (SDL_HasRectIntersectionFloat(&drect, &mouse.point))
@@ -41,10 +32,5 @@ public:
 			isSelected = false;
 			srect.x = 0;
 		}
-	}
-
-	void draw()
-	{
-		SDL_RenderTexture(renderer, texture, &srect, &drect);
 	}
 };
