@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include "Entrance.h"
 #include "DungeonRoom.h"
+#include "Campire.h"
 
 
 
@@ -60,6 +61,43 @@ void FadeTransition(bool fadeIn, int durationMs)
     SDL_DestroyTexture(texture);
 }
 
+
+
+void CampfireScene()
+{
+    Campfire* campfire = new Campfire();
+    bool running = true;
+    bool fadeIn = true;
+    while (running)
+    {
+        SDL_Event event;
+        SDL_RenderPresent(renderer);
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+            case SDL_EVENT_QUIT:
+                running = false;
+                break;
+            case SDL_EVENT_MOUSE_BUTTON_UP:
+                if (event.button.button == SDL_BUTTON_LEFT)
+                {
+
+                }
+            }
+        }
+        SDL_RenderClear(renderer);
+        campfire->draw();
+        if (fadeIn)
+        {
+            FadeTransition(true, 1500);
+            fadeIn = false;
+            FadeTransition(false, 1500);
+            return;
+        }
+        SDL_Delay(16);
+    }
+}
 
 
 void GameOver(Player* player)
@@ -651,6 +689,9 @@ void Game(Player* player)
                         if (restButton->isSelected)
                         {
                             player->setHealth(player->getMaxHealth());
+                            FadeTransition(false, 800);
+                            CampfireScene();
+                            fadeIn = true;
                             actionsOnFloorTaken++;
                             std::cout << actionsOnFloorTaken << std::endl;
                             enemy = GetEnemy(enemy);

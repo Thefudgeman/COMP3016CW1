@@ -136,6 +136,7 @@
     <ClInclude Include="ActionsBox.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Campire.h" />
     <ClInclude Include="DungeonRoom.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />

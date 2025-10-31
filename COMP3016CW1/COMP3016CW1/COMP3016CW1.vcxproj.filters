@@ -68,5 +68,8 @@
     <ClInclude Include="UIObject.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Campire.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
