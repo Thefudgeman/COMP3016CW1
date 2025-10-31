@@ -1185,7 +1185,11 @@ int main()
     quit->drect.x = 880;
     quit->drect.y = 510;
     bool running = true;
-    TTF_Init();
+    if (!TTF_Init())
+    {
+        std::cout << "Error opening TTF" << std::endl;
+        return false;
+    }
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
 
@@ -1260,6 +1264,7 @@ int main()
         SDL_Delay(16);
     }
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
 }
 

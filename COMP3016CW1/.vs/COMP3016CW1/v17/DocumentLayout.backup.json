@@ -74,21 +74,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Campire.h",
-              "DocumentMoniker": "C:\\Users\\theob\\OneDrive\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Campire.h",
-              "RelativeDocumentMoniker": "COMP3016CW1\\Campire.h",
-              "ToolTip": "C:\\Users\\theob\\OneDrive\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Campire.h",
-              "RelativeToolTip": "COMP3016CW1\\Campire.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAwBMAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-31T19:24:25.666Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -99,8 +86,7 @@
               "RelativeToolTip": "COMP3016CW1\\ActionsBox.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-26T14:28:09.214Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-26T14:28:09.214Z"
             },
             {
               "$type": "Document",
@@ -134,10 +120,22 @@
               "RelativeDocumentMoniker": "COMP3016CW1\\COMP3016CW1.cpp",
               "ToolTip": "C:\\Users\\theob\\OneDrive\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp*",
               "RelativeToolTip": "COMP3016CW1\\COMP3016CW1.cpp*",
-              "ViewState": "AgIAAJ8CAAAAAAAAAAAAALMCAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAAN8EAAAAAAAAAAAjwPEEAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-24T14:31:04.72Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Campire.h",
+              "DocumentMoniker": "C:\\Users\\theob\\OneDrive\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Campire.h",
+              "RelativeDocumentMoniker": "COMP3016CW1\\Campire.h",
+              "ToolTip": "C:\\Users\\theob\\OneDrive\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Campire.h",
+              "RelativeToolTip": "COMP3016CW1\\Campire.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAwBMAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-10-31T19:24:25.666Z"
             },
             {
               "$type": "Document",
