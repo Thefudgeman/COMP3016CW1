@@ -3,5 +3,5 @@ C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COM
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(31,21): warning C4244: 'initializing': conversion from 'Uint64' to 'int', possible loss of data
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(40,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(44,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(675,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(681,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   COMP3016CW1.vcxproj -> C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\x64\Debug\COMP3016CW1.exe

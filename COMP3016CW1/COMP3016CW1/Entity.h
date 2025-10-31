@@ -8,6 +8,9 @@ class Entity
 		int strength;
 		int agility;
 		int luck;
+		int healthPoints;
+		int maxHealthPoints;
+		int strengthPoints;
 
 	public:
 		int takeDamage(int damage, int health)
@@ -29,6 +32,30 @@ class Entity
 		void setHealth(int value)
 		{
 			health = value;
+		}
+		int getMaxHealthPoints()
+		{
+			return maxHealthPoints;
+		}
+		void setMaxHealthPoints(int value)
+		{
+			maxHealthPoints = 100 + 23 * value;
+		}
+		int getStrengthPoints()
+		{
+			return strengthPoints;
+		}
+		void setStrengthPoints(int value)
+		{
+			strengthPoints = 15 + 6 * value;
+		}
+		int getHealthPoints()
+		{
+			return healthPoints;
+		}
+		void setHealthPoints(int value)
+		{
+			healthPoints = value;
 		}
 		int getStrength()
 		{

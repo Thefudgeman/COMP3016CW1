@@ -289,16 +289,19 @@ void Battle(Player* player, Enemy* enemy)
 
                     if (attackButton->isSelected)
                     {
-                        enemy->setHealth(enemy->getHealth() - player->getStrength());
-                        std::cout << enemy->getHealth() << enemy->getName() << currentFloor << std::endl;
-                        if (enemy->getHealth() <= 0)
+                        enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints());
+                        std::cout << enemy->getHealthPoints() << enemy->getName() << currentFloor << std::endl;
+                        if (enemy->getHealthPoints() <= 0)
                         {
                             FadeTransition(false, 800);
                             return;
                         }
-                        else if (player->getHealth() <= 0)
+                        player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
+                        if (player->getHealthPoints() <= 0)
                         {
+                            FadeTransition(false, 800);
                             GameOver(player);
+                            return;
                         }
                     }
                     if (itemButton->isSelected)
@@ -351,7 +354,7 @@ void Battle(Player* player, Enemy* enemy)
         SDL_DestroySurface(surfaceRest);
         SDL_DestroyTexture(textureRest);
 
-        health = std::to_string(player->getHealth()) + "/" + std::to_string(player->getMaxHealth());
+        health = std::to_string(player->getHealthPoints()) + "/" + std::to_string(player->getMaxHealthPoints());
         SDL_Surface* surfacePlayerHealth = TTF_RenderText_Solid(font, health.c_str(), health.length(), healthTextColour);
         SDL_Texture* texturePlayerHealth = SDL_CreateTextureFromSurface(renderer, surfacePlayerHealth);
         SDL_FRect textRectPlayerHealth = { 225,275,fontSize * health.length()/2,32};
@@ -359,7 +362,7 @@ void Battle(Player* player, Enemy* enemy)
         SDL_DestroySurface(surfacePlayerHealth);
         SDL_DestroyTexture(texturePlayerHealth);
 
-        health = std::to_string(enemy->getHealth()) + "/" + std::to_string(enemy->getMaxHealth());
+        health = std::to_string(enemy->getHealthPoints()) + "/" + std::to_string(enemy->getMaxHealthPoints());
         SDL_Surface* surfaceEnemyHealth = TTF_RenderText_Solid(font, health.c_str(), health.length(), healthTextColour);
         SDL_Texture* textureEnemyHealth = SDL_CreateTextureFromSurface(renderer, surfaceEnemyHealth);
         SDL_FRect textRectEnemyHealth = { 225,100,fontSize * health.length() / 2,32 };
@@ -526,6 +529,9 @@ Enemy* GetEnemy(Enemy* enemy)
         }
         break;
     }
+    enemy->setMaxHealthPoints(enemy->getMaxHealth());
+    enemy->setHealthPoints(enemy->getMaxHealthPoints());
+    enemy->setStrengthPoints(enemy->getStrength());
     return enemy;
 }
 
@@ -658,7 +664,7 @@ void Game(Player* player)
                             std::cout << "fight" << std::endl;
                             FadeTransition(false, 800);
                             Battle(player, enemy);
-                            if (player->getHealth() <= 0)
+                            if (player->getHealthPoints() <= 0)
                             {
                                 return;
                             }
@@ -688,7 +694,7 @@ void Game(Player* player)
                         }
                         if (restButton->isSelected)
                         {
-                            player->setHealth(player->getMaxHealth());
+                            player->setHealthPoints(player->getMaxHealthPoints());
                             FadeTransition(false, 800);
                             CampfireScene();
                             fadeIn = true;
@@ -712,18 +718,19 @@ void Game(Player* player)
                             highestFloor = currentFloor;
                             canGoToFloor = false;
                         }
+                        enemy = GetEnemy(enemy);
                     }
                     if (previousFloorButton->isSelected)
                     {
                         currentFloor--;
                         actionsOnFloorTaken = 0;
                         previousFloorButton->isSelected = false;
+                        enemy = GetEnemy(enemy);
                     }
                 }
             }
         }
         SDL_RenderClear(renderer);
-
         if (!entered)
         {
             entranceImg->draw();
@@ -975,6 +982,9 @@ void CreateCharacterScreen()
                     {
                         if (done->isSelected)
                         {
+                            player->setMaxHealthPoints(player->getMaxHealth());
+                            player->setHealthPoints(player->getMaxHealthPoints());
+                            player->setStrengthPoints(player->getStrength());
                             FadeTransition(false, 800);
                             Game(player);
                             return;
