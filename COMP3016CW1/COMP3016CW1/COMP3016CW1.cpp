@@ -17,6 +17,51 @@
 
 
 
+void FadeTransition(bool fadeIn, int durationMs)
+{
+    int startTime = SDL_GetTicks();
+    int alpha = fadeIn ? 255 : 0;
+    SDL_Surface* surface = SDL_RenderReadPixels(renderer, NULL);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_RenderTexture(renderer, texture, NULL, NULL);
+
+    while (true)
+    {
+        int elapsed = SDL_GetTicks() - startTime;
+        float progress = (float)elapsed / durationMs;
+        if (progress > 1.0f)
+        {
+            progress = 1.0f;
+        }
+
+        if (fadeIn)
+        {
+            alpha = (255 * (1.0f - progress));
+        }
+        else
+        {
+            alpha = (255 * progress);
+        }      
+
+        SDL_RenderTexture(renderer, texture, NULL, NULL);
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
+        SDL_RenderFillRect(renderer, NULL);
+        SDL_RenderPresent(renderer);
+
+        if (elapsed >= durationMs)
+        {
+            break;
+        }
+
+        SDL_Delay(16);
+    }
+    SDL_DestroySurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+
+
 void GameOver(Player* player)
 {
     float fontSize = 33;
@@ -38,6 +83,7 @@ void GameOver(Player* player)
 
     bool running = true;
     std::string stat;
+    bool fadeIn = true;
 
     while (running)
     {
@@ -58,6 +104,7 @@ void GameOver(Player* player)
                 {
                     if (leaveButton->isSelected)
                     {
+                        FadeTransition(false, 800);
                         return;
                     }
                 }
@@ -134,7 +181,12 @@ void GameOver(Player* player)
         SDL_DestroyTexture(textureLuck);
 
         mouse->draw();
-
+        if (fadeIn)
+        {
+            FadeTransition(true, 800);
+            fadeIn = false;
+        }
+        SDL_Delay(16);
     }
 }
 
@@ -174,6 +226,7 @@ void Battle(Player* player, Enemy* enemy)
     bool running = true;
     bool entered = false;
     std::string health;
+    bool fadeIn = true;
    
 
     while (running)
@@ -202,6 +255,7 @@ void Battle(Player* player, Enemy* enemy)
                         std::cout << enemy->getHealth() << enemy->getName() << currentFloor << std::endl;
                         if (enemy->getHealth() <= 0)
                         {
+                            FadeTransition(false, 800);
                             return;
                         }
                         else if (player->getHealth() <= 0)
@@ -222,6 +276,7 @@ void Battle(Player* player, Enemy* enemy)
                         }
                         else
                         {
+                            FadeTransition(false, 800);
                             return;
                         }
                     }
@@ -276,6 +331,12 @@ void Battle(Player* player, Enemy* enemy)
 
         mouse->draw();
 
+        if (fadeIn)
+        {
+            FadeTransition(true, 800);
+            fadeIn = false;
+        }
+        SDL_Delay(16);
     }
 }
 
@@ -495,6 +556,8 @@ void Game(Player* player)
 
     enemy = GetEnemy(enemy);
 
+    bool fadeIn = true;
+
     
 
     bool running = true;
@@ -545,7 +608,9 @@ void Game(Player* player)
                     {
                         if (enterButton->isSelected)
                         {
+                            FadeTransition(false, 800);
                             entered = true;
+                            fadeIn = true;
                         }
                     }
                     else
@@ -553,11 +618,13 @@ void Game(Player* player)
                         if (fightButton->isSelected)
                         {
                             std::cout << "fight" << std::endl;
+                            FadeTransition(false, 800);
                             Battle(player, enemy);
                             if (player->getHealth() <= 0)
                             {
                                 return;
                             }
+                            fadeIn = true;
                             actionsOnFloorTaken++;
                             enemy = GetEnemy(enemy);
                             std::cout << enemy->getName() << std::endl;
@@ -573,6 +640,7 @@ void Game(Player* player)
                                 {
                                     std::cout << "dead" << std::endl;
 
+                                    FadeTransition(false, 800);
                                     GameOver(player);
                                     return;
                                 }
@@ -687,6 +755,12 @@ void Game(Player* player)
         SDL_DestroyTexture(textureQuit);
         mouse->draw();
 
+        if (fadeIn)
+        {
+            FadeTransition(true, 800);
+            fadeIn = false;
+        }
+        SDL_Delay(16);
     }
 }
 
@@ -773,6 +847,8 @@ void CreateCharacterScreen()
     std::string statPoints;
     std::string stat;
 
+    bool fadeIn = true;
+
     struct
     {
         int maxHealth;
@@ -858,6 +934,7 @@ void CreateCharacterScreen()
                     {
                         if (done->isSelected)
                         {
+                            FadeTransition(false, 800);
                             Game(player);
                             return;
                         }
@@ -916,6 +993,7 @@ void CreateCharacterScreen()
                     }
                     if (back->isSelected)
                     {
+                        FadeTransition(false, 800);
                         running = false;
                     }
                   
@@ -1034,6 +1112,13 @@ void CreateCharacterScreen()
         
         mouse->draw();
 
+
+        if (fadeIn)
+        {
+            FadeTransition(true, 800);
+            fadeIn = false;
+        }
+        SDL_Delay(16);
     }
 }
 
@@ -1063,6 +1148,8 @@ int main()
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
 
+    bool fadeIn = true;
+
     while (running)
     {
         SDL_Event event;
@@ -1084,7 +1171,10 @@ int main()
                     if (start->isSelected)
                     {
                         std::cout << "Start";
+                        FadeTransition(false, 800);
                         CreateCharacterScreen();
+                        
+                        fadeIn = true;
                     }
                     else if (options->isSelected)
                     {
@@ -1121,7 +1211,12 @@ int main()
         SDL_DestroySurface(surfaceQuit);
         SDL_DestroyTexture(textureQuit);
         mouse->draw();
-
+        if (fadeIn)
+        {
+            FadeTransition(true, 800);
+            fadeIn = false;
+        }
+        SDL_Delay(16);
     }
     SDL_DestroyWindow(window);
     SDL_Quit();

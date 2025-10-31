@@ -1,3 +1,7 @@
 ﻿  COMP3016CW1.cpp
-C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(570,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(22,19): warning C4244: 'initializing': conversion from 'Uint64' to 'int', possible loss of data
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(30,21): warning C4244: 'initializing': conversion from 'Uint64' to 'int', possible loss of data
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(36,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(40,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(634,71): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   COMP3016CW1.vcxproj -> C:\Users\theob\OneDrive\Documents\GitHub\COMP3016CW1\COMP3016CW1\x64\Debug\COMP3016CW1.exe
