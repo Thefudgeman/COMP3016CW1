@@ -290,13 +290,21 @@ void Battle(Player* player, Enemy* enemy)
                     if (attackButton->isSelected)
                     {
                         int dodge = rand() % 100;
+                        int critHit = rand() % 100;
                         if (dodge < enemy->getAgility())
                         {
 
                         }
                         else
                         {
-                            enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints());
+                            if (critHit < player->getLuck())
+                            {
+                                enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints()*1.7);
+                            }
+                            else
+                            {
+                                enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints());
+                            }
                         }
                         std::cout << enemy->getHealthPoints() << enemy->getName() << currentFloor << std::endl;
                         if (enemy->getHealthPoints() <= 0)
@@ -305,13 +313,21 @@ void Battle(Player* player, Enemy* enemy)
                             return;
                         }
                         dodge = rand() % 100;
+                        critHit = rand() % 100;
                         if (dodge < player->getAgility())
                         {
 
                         }
                         else
                         {
-                            player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
+                            if (critHit < enemy->getLuck())
+                            {
+                                player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints() * 1.7);
+                            }
+                            else
+                            {
+                                player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
+                            }
                         }
                         if (player->getHealthPoints() <= 0)
                         {
