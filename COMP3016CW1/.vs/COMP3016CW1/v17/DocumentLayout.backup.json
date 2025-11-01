@@ -11,12 +11,12 @@
       "RelativeMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|solutionrelative:COMP3016CW1\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\ActionsBox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|solutionrelative:COMP3016CW1\\ActionsBox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Entity.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|solutionrelative:COMP3016CW1\\Entity.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\ActionsBox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|solutionrelative:COMP3016CW1\\ActionsBox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{09534458-04D5-468B-B2CC-9795D2D61601}|COMP3016CW1\\COMP3016CW1.vcxproj|C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Enemy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -106,9 +106,9 @@
               "Title": "COMP3016CW1.cpp",
               "DocumentMoniker": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp",
               "RelativeDocumentMoniker": "COMP3016CW1\\COMP3016CW1.cpp",
-              "ToolTip": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp",
-              "RelativeToolTip": "COMP3016CW1\\COMP3016CW1.cpp",
-              "ViewState": "AgIAADIDAAAAAAAAAAAkwEEDAAAZAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp*",
+              "RelativeToolTip": "COMP3016CW1\\COMP3016CW1.cpp*",
+              "ViewState": "AgIAACUBAAAAAAAAAAAkwDcBAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-24T14:31:04.72Z",
               "EditorCaption": ""
@@ -211,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Entity.h",
               "DocumentMoniker": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Entity.h",
               "RelativeDocumentMoniker": "COMP3016CW1\\Entity.h",
@@ -219,7 +219,8 @@
               "RelativeToolTip": "COMP3016CW1\\Entity.h",
               "ViewState": "AgIAAAcAAAAAAAAAAAAjwBoAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-24T14:32:48.623Z"
+              "WhenOpened": "2025-10-24T14:32:48.623Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -229,14 +230,14 @@
               "RelativeDocumentMoniker": "COMP3016CW1\\Player.h",
               "ToolTip": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\Player.h",
               "RelativeToolTip": "COMP3016CW1\\Player.h",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAwDUAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAwBwAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-10-24T14:32:33.61Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ActionsBox.h",
               "DocumentMoniker": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\ActionsBox.h",
               "RelativeDocumentMoniker": "COMP3016CW1\\ActionsBox.h",
@@ -244,8 +245,7 @@
               "RelativeToolTip": "COMP3016CW1\\ActionsBox.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-26T14:28:09.214Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-26T14:28:09.214Z"
             },
             {
               "$type": "Document",

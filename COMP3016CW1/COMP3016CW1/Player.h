@@ -34,6 +34,7 @@ class Player : public Entity
 				statPoints += 2;
 				float e = exp(1);
 				xpToNextLevel = 99 + (pow(level, exp(1)));
+				std::cout << xp << std::endl << xpToNextLevel << std::endl;
 			}
 		}
 		int getStatPoints()

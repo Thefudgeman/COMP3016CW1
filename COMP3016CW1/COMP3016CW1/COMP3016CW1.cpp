@@ -309,7 +309,7 @@ void Battle(Player* player, Enemy* enemy)
                         std::cout << enemy->getHealthPoints() << enemy->getName() << currentFloor << std::endl;
                         if (enemy->getHealthPoints() <= 0)
                         {
-                            player->gainXp(player->getXp() + enemy->getGiveXp());
+                            player->gainXp(enemy->getGiveXp());
                             FadeTransition(false, 800);
                             return;
                         }
@@ -746,7 +746,7 @@ void Game(Player* player)
 
                 done->update(*mouse);
             }
-            else
+            else if (player->getStatPoints() == 0)
             {
                 fightButton->update(*mouse);
                 runButton->update(*mouse);
@@ -789,101 +789,109 @@ void Game(Player* player)
                     }
                     else
                     {
-                        if (fightButton->isSelected)
+                        if (player->getStatPoints() == 0)
                         {
-                            std::cout << "fight" << std::endl;
-                            FadeTransition(false, 800);
-                            Battle(player, enemy);
-                            if (player->getHealthPoints() <= 0)
+                            if (fightButton->isSelected)
                             {
-                                return;
-                            }
-                            fadeIn = true;
-                            actionsOnFloorTaken++;
-                            enemy = GetEnemy(enemy);
-                            std::cout << enemy->getName() << std::endl;
-                        }
-                        if (runButton->isSelected)
-                        {
-                            int random = rand() % 3;
-                            if (random == 0)
-                            {
-                                player->setHealth(player->getHealth() - player->getHealth() * 0.15);
-
-                                if (player->getHealth() <= 0)
+                                std::cout << "fight" << std::endl;
+                                FadeTransition(false, 800);
+                                Battle(player, enemy);
+                                if (player->getHealthPoints() <= 0)
                                 {
-                                    std::cout << "dead" << std::endl;
-
-                                    FadeTransition(false, 800);
-                                    GameOver(player);
                                     return;
                                 }
+                                fadeIn = true;
+                                actionsOnFloorTaken++;
+                                enemy = GetEnemy(enemy);
+                                std::cout << enemy->getName() << std::endl;
                             }
-                            actionsOnFloorTaken++;
-                            enemy = GetEnemy(enemy);
-                        }
-                        if (restButton->isSelected)
-                        {
-                            player->setHealthPoints(player->getMaxHealthPoints());
-                            FadeTransition(false, 800);
-                            CampfireScene();
-                            fadeIn = true;
-                            actionsOnFloorTaken++;
-                            std::cout << actionsOnFloorTaken << std::endl;
-                            enemy = GetEnemy(enemy);
-                        }
+                            if (runButton->isSelected)
+                            {
+                                int random = rand() % 3;
+                                if (random == 0)
+                                {
+                                    player->setHealth(player->getHealth() - player->getHealth() * 0.15);
 
-                        if (plusHealth->isSelected && player->getStatPoints() > 0)
-                        {
-                            player->setMaxHealth(player->getMaxHealth() + 1);
-                            player->setStatPoints(player->getStatPoints() - 1);
-                            std::cout << player->getStatPoints() << std::endl;
-                        }
-                        if (minusHealth->isSelected && originalStats.maxHealth < player->getMaxHealth())
-                        {
-                            player->setMaxHealth(player->getMaxHealth() - 1);
-                            player->setStatPoints(player->getStatPoints() + 1);
-                            std::cout << player->getStatPoints() << std::endl;
-                        }
+                                    if (player->getHealth() <= 0)
+                                    {
+                                        std::cout << "dead" << std::endl;
 
-                        if (plusStrength->isSelected && player->getStatPoints() > 0)
-                        {
-                            player->setStrength(player->getStrength() + 1);
-                            player->setStatPoints(player->getStatPoints() - 1);
-                            std::cout << player->getStatPoints() << std::endl;
+                                        FadeTransition(false, 800);
+                                        GameOver(player);
+                                        return;
+                                    }
+                                }
+                                actionsOnFloorTaken++;
+                                enemy = GetEnemy(enemy);
+                            }
+                            if (restButton->isSelected)
+                            {
+                                player->setHealthPoints(player->getMaxHealthPoints());
+                                FadeTransition(false, 800);
+                                CampfireScene();
+                                fadeIn = true;
+                                actionsOnFloorTaken++;
+                                std::cout << actionsOnFloorTaken << std::endl;
+                                enemy = GetEnemy(enemy);
+                            }
                         }
-                        if (minusStrength->isSelected && originalStats.strength < player->getStrength())
+                        else
                         {
-                            player->setStrength(player->getStrength() - 1);
-                            player->setStatPoints(player->getStatPoints() + 1);
-                            std::cout << player->getStatPoints() << std::endl;
-                        }
+                            if (plusHealth->isSelected && player->getStatPoints() > 0)
+                            {
+                                player->setMaxHealth(player->getMaxHealth() + 1);
+                                player->setStatPoints(player->getStatPoints() - 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
+                            if (minusHealth->isSelected && originalStats.maxHealth < player->getMaxHealth())
+                            {
+                                player->setMaxHealth(player->getMaxHealth() - 1);
+                                player->setStatPoints(player->getStatPoints() + 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
 
-                        if (plusAgility->isSelected && player->getStatPoints() > 0)
-                        {
-                            player->setAgility(player->getAgility() + 1);
-                            player->setStatPoints(player->getStatPoints() - 1);
-                            std::cout << player->getStatPoints() << std::endl;
-                        }
-                        if (minusAgility->isSelected && originalStats.agility < player->getAgility())
-                        {
-                            player->setAgility(player->getAgility() - 1);
-                            player->setStatPoints(player->getStatPoints() + 1);
-                            std::cout << player->getStatPoints() << std::endl;
-                        }
+                            if (plusStrength->isSelected && player->getStatPoints() > 0)
+                            {
+                                player->setStrength(player->getStrength() + 1);
+                                player->setStatPoints(player->getStatPoints() - 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
+                            if (minusStrength->isSelected && originalStats.strength < player->getStrength())
+                            {
+                                player->setStrength(player->getStrength() - 1);
+                                player->setStatPoints(player->getStatPoints() + 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
 
-                        if (plusLuck->isSelected && player->getStatPoints() > 0)
-                        {
-                            player->setLuck(player->getLuck() + 1);
-                            player->setStatPoints(player->getStatPoints() - 1);
-                            std::cout << player->getStatPoints() << std::endl;
+                            if (plusAgility->isSelected && player->getStatPoints() > 0)
+                            {
+                                player->setAgility(player->getAgility() + 1);
+                                player->setStatPoints(player->getStatPoints() - 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
+                            if (minusAgility->isSelected && originalStats.agility < player->getAgility())
+                            {
+                                player->setAgility(player->getAgility() - 1);
+                                player->setStatPoints(player->getStatPoints() + 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
+
+                            if (plusLuck->isSelected && player->getStatPoints() > 0)
+                            {
+                                player->setLuck(player->getLuck() + 1);
+                                player->setStatPoints(player->getStatPoints() - 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
+                            if (minusLuck->isSelected && originalStats.luck < player->getLuck())
+                            {
+                                player->setLuck(player->getLuck() - 1);
+                                player->setStatPoints(player->getStatPoints() + 1);
+                                std::cout << player->getStatPoints() << std::endl;
+                            }
                         }
-                        if (minusLuck->isSelected && originalStats.luck < player->getLuck())
-                        {
-                            player->setLuck(player->getLuck() - 1);
-                            player->setStatPoints(player->getStatPoints() + 1);
-                            std::cout << player->getStatPoints() << std::endl;
-                        }
+                      
+
+                       
                     }
                     if (quitButton->isSelected)
                     {
@@ -930,6 +938,7 @@ void Game(Player* player)
 
             if (player->getStatPoints() > 0)
             {
+                box->draw();
                 done->draw();
                 SDL_Surface* surfaceDone = TTF_RenderText_Solid(font, "DONE", 4, textColour);
                 SDL_Texture* textureDone = SDL_CreateTextureFromSurface(renderer, surfaceDone);
@@ -937,10 +946,16 @@ void Game(Player* player)
                 SDL_RenderTexture(renderer, textureDone, NULL, &textRectDone);
                 SDL_DestroySurface(surfaceDone);
                 SDL_DestroyTexture(textureDone);
+                SDL_Surface* surfaceLevelUp = TTF_RenderText_Solid(font, "LEVEL UP", 9, textColour);
+                SDL_Texture* textureLevelUp = SDL_CreateTextureFromSurface(renderer, surfaceLevelUp);
+                SDL_FRect textRectLevelUp = { 250,100,fontSize * 9,60 };
+                SDL_RenderTexture(renderer, textureLevelUp, NULL, &textRectLevelUp);
+                SDL_DestroySurface(surfaceLevelUp);
+                SDL_DestroyTexture(textureLevelUp);
 
                 SDL_Surface* surfaceAllocatePoints = TTF_RenderText_Solid(font, "ALLOCATE POINTS", 16, textColour);
                 SDL_Texture* textureAllocatePoints = SDL_CreateTextureFromSurface(renderer, surfaceAllocatePoints);
-                SDL_FRect textRectAllocatePoints = { 250,100,fontSize * 15,60 };
+                SDL_FRect textRectAllocatePoints = { 250,180,fontSize * 15/1.5,48 };
                 SDL_RenderTexture(renderer, textureAllocatePoints, NULL, &textRectAllocatePoints);
                 SDL_DestroySurface(surfaceAllocatePoints);
                 SDL_DestroyTexture(textureAllocatePoints);
