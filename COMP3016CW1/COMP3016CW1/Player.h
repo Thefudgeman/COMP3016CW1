@@ -32,6 +32,8 @@ class Player : public Entity
 				level++;
 				xp -= xpToNextLevel;
 				statPoints += 2;
+				float e = exp(1);
+				xpToNextLevel = 99 + (pow(level, exp(1)));
 			}
 		}
 		int getStatPoints()
