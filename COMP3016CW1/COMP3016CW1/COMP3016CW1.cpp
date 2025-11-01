@@ -289,14 +289,30 @@ void Battle(Player* player, Enemy* enemy)
 
                     if (attackButton->isSelected)
                     {
-                        enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints());
+                        int dodge = rand() % 100;
+                        if (dodge < enemy->getAgility())
+                        {
+
+                        }
+                        else
+                        {
+                            enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints());
+                        }
                         std::cout << enemy->getHealthPoints() << enemy->getName() << currentFloor << std::endl;
                         if (enemy->getHealthPoints() <= 0)
                         {
                             FadeTransition(false, 800);
                             return;
                         }
-                        player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
+                        dodge = rand() % 100;
+                        if (dodge < player->getAgility())
+                        {
+
+                        }
+                        else
+                        {
+                            player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
+                        }
                         if (player->getHealthPoints() <= 0)
                         {
                             FadeTransition(false, 800);
@@ -1202,6 +1218,7 @@ int main()
     }
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
+
 
     bool fadeIn = true;
 
