@@ -11,8 +11,44 @@ C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.
 C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(44,21): warning C4244: 'initializing': conversion from 'Uint64' to 'int', possible loss of data
 C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(53,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(57,26): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(280,81): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(304,83): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(327,79): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(682,75): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,25): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,32): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,32): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,39): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,39): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,46): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(228,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,22): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,25): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,28): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,31): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(232,31): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,21): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,21): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,24): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,46): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,62): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(251,62): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(287,27): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(288,26): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(315,35): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(320,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(325,77): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(342,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(347,83): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(365,72): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(366,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(381,97): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(385,95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(455,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(625,27): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(719,87): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(895,80): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\COMP3016CW1\COMP3016CW1.cpp(930,105): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   COMP3016CW1.vcxproj -> C:\Users\theob\Documents\GitHub\COMP3016CW1\COMP3016CW1\x64\Debug\COMP3016CW1.exe

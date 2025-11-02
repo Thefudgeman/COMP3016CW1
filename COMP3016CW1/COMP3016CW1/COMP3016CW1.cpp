@@ -125,6 +125,8 @@ void GameOver(Player* player, bool victory) //victory determines if the player w
     leaveButton->drect.h = 52;
     leaveButton->drect.w = 150;
 
+    DungeonRoom* dungeonRoom = new DungeonRoom();
+
     Box* finalStatsBox = new Box();
     finalStatsBox->srect.y = 0;
     finalStatsBox->drect.x = 340;
@@ -160,7 +162,7 @@ void GameOver(Player* player, bool victory) //victory determines if the player w
             }
         }
         SDL_RenderClear(renderer);
-
+        dungeonRoom->draw();
         finalStatsBox->draw();
         if (!victory) //if player died
         {
@@ -207,53 +209,97 @@ void GameOver(Player* player, bool victory) //victory determines if the player w
 }
 
 
+float SmoothStep(float t) {
+    return t * t * (3 - 2 * t);
+}
+
+float Lerp(float a, float b, float t) {
+    return a + (b - a) * t;
+}
+
+void RenderHealthBar(SDL_Renderer* renderer, int x, int y, int w, int h, float displayHP, float maxHP)
+{
+    if (!renderer || maxHP <= 0) return;
+
+    float healthRatio = displayHP / maxHP;
+    if (healthRatio < 0.0f) healthRatio = 0.0f;
+    if (healthRatio > 1.0f) healthRatio = 1.0f;
+
+    SDL_FRect border{ x - 2, y - 2, w + 4, h + 4 };
+    SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
+    SDL_RenderFillRect(renderer, &border);
+
+    SDL_FRect empty{ x, y, w, h };
+    SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+    SDL_RenderFillRect(renderer, &empty);
+
+    Uint8 r, g, b;
+    if (healthRatio > 0.5f) {
+        float t = (healthRatio - 0.5f) / 0.5f;
+        r = static_cast<Uint8>(255 * (1.0f - t));
+        g = 255;
+        b = 0;
+    }
+    else {
+        float t = healthRatio / 0.5f;
+        r = 255;
+        g = static_cast<Uint8>(255 * t);
+        b = 0;
+    }
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    SDL_FRect fill{ x, y, static_cast<int>(w * healthRatio), h };
+    SDL_RenderFillRect(renderer, &fill);
+}
+
 void Battle(Player* player, Enemy* enemy)
 {
     float fontSize = 28;
     Mouse* mouse = new Mouse();
     TTF_Font* font = TTF_OpenFont("images/font.ttf", 60);
     SDL_Color textColour = { 255,255,255,255 };
-    SDL_Color healthTextColour = { 255, 0, 0, 255 };
 
     DungeonRoom* dungeonRoom = new DungeonRoom();
 
     ActionsBox* actionsBox = new ActionsBox();
-    actionsBox->srect.y = 0;
     actionsBox->drect.x = 10;
     actionsBox->drect.y = 500;
     actionsBox->drect.w = 1260;
     actionsBox->drect.h = 220;
 
     GameButtons* attackButton = new GameButtons();
-    attackButton->srect.y = 0;
     attackButton->drect.x = 170;
     attackButton->drect.y = 550;
 
     GameButtons* itemButton = new GameButtons();
-    itemButton->srect.y = 0;
     itemButton->drect.x = 475;
     itemButton->drect.y = 550;
 
     GameButtons* runButton = new GameButtons();
-    runButton->srect.y = 0;
     runButton->drect.x = 780;
     runButton->drect.y = 550;
 
     bool running = true;
-    bool entered = false;
-    std::string health;
     bool fadeIn = true;
-   
+    bool enemyDefeated = false;
+
+
+    float displayPlayerHP = player->getHealthPoints();
+    float displayEnemyHP = enemy->getHealthPoints();
+
 
     while (running)
     {
         SDL_Event event;
         SDL_RenderPresent(renderer);
 
+
         mouse->update();
         attackButton->update(*mouse);
         itemButton->update(*mouse);
         runButton->update(*mouse);
+
+
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -262,86 +308,63 @@ void Battle(Player* player, Enemy* enemy)
                 running = false;
                 break;
             case SDL_EVENT_MOUSE_BUTTON_UP:
-                if (event.button.button == SDL_BUTTON_LEFT)
+                if (event.button.button == SDL_BUTTON_LEFT && !enemyDefeated)
                 {
-
                     if (attackButton->isSelected)
                     {
-                        int dodge = rand() % 100; //generate dodge and critHit numbers
+                        srand(time(NULL)); //stops random numbers appearing in same order when reloading game
+                        int dodge = rand() % 100;
                         int critHit = rand() % 100;
-                        if (dodge < enemy->getAgility()) //enemy takes no damage
+                        if (dodge > enemy->getAgility())
                         {
+                            float damage = player->getStrengthPoints();
+                            if (critHit < player->getLuck())
+                            {
+                                damage *= 1.7f;
+                            }
+                            enemy->setHealthPoints(enemy->getHealthPoints() - damage);
+                        }
 
-                        }
-                        else //enemy takes damage
-                        {
-                            if (critHit < player->getLuck()) //player deals critical hit
-                            {
-                                enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints()*1.7);
-                            }
-                            else
-                            {
-                                enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints());
-                            }
-                        }
-                        std::cout << enemy->getHealthPoints() << enemy->getName() << currentFloor << std::endl;
+
                         if (enemy->getHealthPoints() <= 0)
                         {
-                            player->gainXp(enemy->getGiveXp()); //player gains xp after defeating enemy
-                            FadeTransition(false, 800);
-                            return;
+                            enemy->setHealthPoints(0);
+                            enemyDefeated = true; 
                         }
-                        dodge = rand() % 100;
-                        critHit = rand() % 100;
-                        if (dodge < player->getAgility()) //player takes no damage
-                        {
 
-                        }
-                        else
-                        {
-                            if (critHit < enemy->getLuck()) // enemy hits player with critical hit
-                            {
-                                player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints() * 1.7);
-                            }
-                            else
-                            {
-                                player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
-                            }
-                        }
-                        if (player->getHealthPoints() <= 0) //player dies and goes to game over scene
-                        {
-                            FadeTransition(false, 800);
-                            GameOver(player, false);
-                            return;
-                        }
-                    }
-                    if (itemButton->isSelected)
-                    {
 
-                    }
-                    if (runButton->isSelected)
-                    {
-                        int random = rand() % 3;
-                        if (random == 0) //player has a chance to take 15% of max health as damage
+                        if (!enemyDefeated)
                         {
-                            player->setHealthPoints(player->getHealthPoints() - player->getMaxHealthPoints() * 0.15);
-                            if (player->getHealthPoints() <= 0) //player dies and goes to game over scene
+                            dodge = rand() % 100;
+                            critHit = rand() % 100;
+                            if (dodge > player->getAgility())
+                            {
+                                float damage = enemy->getStrengthPoints();
+                                if (critHit < enemy->getLuck())
+                                {
+                                    damage *= 1.7f;
+                                }
+                                player->setHealthPoints(player->getHealthPoints() - damage);
+                            }
+
+
+                            if (player->getHealthPoints() <= 0)
                             {
                                 FadeTransition(false, 800);
                                 GameOver(player, false);
                                 return;
                             }
                         }
-                        else //player successfully escapes
-                        {
-                            FadeTransition(false, 800);
-                            return;
-                        }
                     }
-                   
                 }
             }
         }
+
+        float t = 0.1f; 
+        float easedT = SmoothStep(t);
+        displayPlayerHP = Lerp(displayPlayerHP, player->getHealthPoints(), easedT);
+        displayEnemyHP = Lerp(displayEnemyHP, enemy->getHealthPoints(), easedT);
+
         SDL_RenderClear(renderer);
         dungeonRoom->draw();
         enemy->draw();
@@ -349,18 +372,17 @@ void Battle(Player* player, Enemy* enemy)
 
         attackButton->draw();
         RenderText("ATTACK", 225, 575, fontSize, font, textColour, 60);
-
-
         itemButton->draw();
         RenderText("ITEM", 570, 575, fontSize, font, textColour, 60);
-
         runButton->draw();
         RenderText("RUN", 890, 575, fontSize, font, textColour, 60);
 
-        RenderText(std::to_string(player->getHealthPoints()) + "/" + std::to_string(player->getMaxHealthPoints()), 225, 275, fontSize/2, font, textColour, 32);
+        RenderText("YOU: " + std::to_string((int)player->getHealthPoints()) + "/" + std::to_string((int)player->getMaxHealthPoints()), 110, 400, fontSize / 2, font, textColour, 32);
+        RenderHealthBar(renderer, 110, 435, 300, 20, displayPlayerHP, player->getMaxHealthPoints());
 
-        RenderText(std::to_string(enemy->getHealthPoints()) + "/" + std::to_string(enemy->getMaxHealthPoints()), 225, 100, fontSize/2, font, textColour, 32);
 
+        RenderText(enemy->getName() + ": " + std::to_string((int)enemy->getHealthPoints()) + "/" + std::to_string((int)enemy->getMaxHealthPoints()), 920, 400, fontSize / 2, font, textColour, 32);
+        RenderHealthBar(renderer, 920, 435, 300, 20, displayEnemyHP, enemy->getMaxHealthPoints());
         mouse->draw();
 
         if (fadeIn)
@@ -368,6 +390,20 @@ void Battle(Player* player, Enemy* enemy)
             FadeTransition(true, 800);
             fadeIn = false;
         }
+
+        if (enemyDefeated && displayEnemyHP <= 0.5f)
+        {
+            player->gainXp(enemy->getGiveXp());
+            FadeTransition(false, 800);
+            if (enemy->getName() == "Dragon")
+            {
+                gameVictory = true;
+                GameOver(player, true);
+            }
+            
+            return;
+        }
+
         SDL_Delay(16);
     }
 }
@@ -416,7 +452,7 @@ Enemy* GetEnemy(Enemy* oldEnemy)
     {
         floorIndex = (int)floorEnemies.size() - 1;
     }
-
+    srand(time(NULL)); //stops random numbers appearing in same order when reloading game
     int random = rand() % 10;
     int index;
     if (random < 5)
@@ -586,6 +622,7 @@ void Game(Player* player)
     bool running = true;
     bool entered = false;
     bool canGoToFloor = false;
+    float displayPlayerHP = player->getHealthPoints();
 
     while (running)
     {
@@ -679,7 +716,7 @@ void Game(Player* player)
                                 int random = rand() % 3;
                                 if (random == 0)
                                 {
-                                    player->setHealth(player->getHealth() - player->getHealth() * 0.15);
+                                    player->setHealthPoints(player->getHealthPoints() - player->getMaxHealthPoints() * 0.15);
 
                                     if (player->getHealth() <= 0)
                                     {
@@ -710,12 +747,14 @@ void Game(Player* player)
                             {
                                 player->setMaxHealth(player->getMaxHealth() + 1);
                                 player->setStatPoints(player->getStatPoints() - 1);
+                                player->setMaxHealthPoints(player->getMaxHealth());
                                 std::cout << player->getStatPoints() << std::endl;
                             }
                             if (minusHealth->isSelected && originalStats.maxHealth < player->getMaxHealth())
                             {
                                 player->setMaxHealth(player->getMaxHealth() - 1);
                                 player->setStatPoints(player->getStatPoints() + 1);
+                                player->setMaxHealthPoints(player->getMaxHealth());
                                 std::cout << player->getStatPoints() << std::endl;
                             }
 
@@ -723,12 +762,14 @@ void Game(Player* player)
                             {
                                 player->setStrength(player->getStrength() + 1);
                                 player->setStatPoints(player->getStatPoints() - 1);
+                                player->setStrengthPoints(player->getStrength());
                                 std::cout << player->getStatPoints() << std::endl;
                             }
                             if (minusStrength->isSelected && originalStats.strength < player->getStrength())
                             {
                                 player->setStrength(player->getStrength() - 1);
                                 player->setStatPoints(player->getStatPoints() + 1);
+                                player->setStrengthPoints(player->getStrength());
                                 std::cout << player->getStatPoints() << std::endl;
                             }
 
@@ -764,6 +805,8 @@ void Game(Player* player)
                     }
                     if (quitButton->isSelected)
                     {
+                        canGoToFloor = false;
+                        actionsOnFloorTaken = 0;
                         return;
                     }
                     if (nextFloorButton->isSelected)
@@ -790,7 +833,14 @@ void Game(Player* player)
             }
         }
         SDL_RenderClear(renderer);
-        if (!entered)
+        if (gameVictory)
+        {
+            gameVictory = false;
+            canGoToFloor = false;
+            actionsOnFloorTaken = 0;
+            return;
+        }
+        else if (!entered)
         {
             entranceImg->draw();
             enterButton->draw();
@@ -840,6 +890,10 @@ void Game(Player* player)
             }
             else //show when player has no stat points to allocate
             {
+                float t = 0.1f;
+                float easedT = SmoothStep(t);
+                displayPlayerHP = Lerp(displayPlayerHP, player->getHealthPoints(), easedT);
+
                 enemy->draw();
 
                 actionsBox->draw();
@@ -870,6 +924,10 @@ void Game(Player* player)
                     RenderText("NEXT FLOOR", 435, 35, fontSize/3, font, textColour, 24);
 
                 }
+
+
+                RenderText("YOU: " + std::to_string((int)player->getHealthPoints()) + "/" + std::to_string((int)player->getMaxHealthPoints()), 110, 400, fontSize / 2, font, textColour, 32);
+                RenderHealthBar(renderer, 110, 435, 300, 20, displayPlayerHP, player->getMaxHealthPoints());
             }
             quitButton->draw();
             RenderText("QUIT", 65, 32, fontSize/2, font, textColour, 32);

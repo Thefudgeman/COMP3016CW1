@@ -9,3 +9,4 @@ SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
 int currentFloor = 1;
 int actionsOnFloorTaken = 0;
 int highestFloor = 1;
+bool gameVictory = false;
