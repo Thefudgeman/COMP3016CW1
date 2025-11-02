@@ -16,7 +16,19 @@
 #include "DungeonRoom.h"
 #include "Campire.h"
 
+void RenderText(const std::string& text, float x, float y, float fontLength, TTF_Font* font, SDL_Color colour, int fontSize) //method to reuse when creating text
+{
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), text.length(), colour);
+    if (!surface) return;
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) { SDL_DestroySurface(surface); return; }
 
+    SDL_FRect rect = { x, y, fontLength * text.length(), fontSize };
+    SDL_RenderTexture(renderer, texture, NULL, &rect);
+
+    SDL_DestroySurface(surface);
+    SDL_DestroyTexture(texture);
+}
 
 void FadeTransition(bool fadeIn, int durationMs)
 {
@@ -24,20 +36,20 @@ void FadeTransition(bool fadeIn, int durationMs)
     int alpha = fadeIn ? 255 : 0;
     SDL_Surface* surface = SDL_RenderReadPixels(renderer, NULL);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_RenderTexture(renderer, texture, NULL, NULL);
+    SDL_RenderTexture(renderer, texture, NULL, NULL); //gets a snapshot of the current scene and renders it under the fade transition
 
     while (true)
     {
         int elapsed = SDL_GetTicks() - startTime;
         float progress = (float)elapsed / durationMs;
-        if (progress > 1.0f)
+        if (progress > 1.0f) //progress cannot be larger than 1
         {
             progress = 1.0f;
         }
 
-        if (fadeIn)
+        if (fadeIn) //changes transparancy of black square for fade transition
         {
-            alpha = (255 * (1.0f - progress));
+            alpha = (255 * (1.0f - progress)); 
         }
         else
         {
@@ -50,7 +62,7 @@ void FadeTransition(bool fadeIn, int durationMs)
         SDL_RenderFillRect(renderer, NULL);
         SDL_RenderPresent(renderer);
 
-        if (elapsed >= durationMs)
+        if (elapsed >= durationMs) //once fade transition is complete exit the loop
         {
             break;
         }
@@ -61,9 +73,7 @@ void FadeTransition(bool fadeIn, int durationMs)
     SDL_DestroyTexture(texture);
 }
 
-
-
-void CampfireScene()
+void CampfireScene() //fades in and out when player rests
 {
     Campfire* campfire = new Campfire();
     bool running = true;
@@ -100,7 +110,7 @@ void CampfireScene()
 }
 
 
-void GameOver(Player* player)
+void GameOver(Player* player, bool victory) //victory determines if the player won or died
 {
     float fontSize = 33;
     Mouse* mouse = new Mouse();
@@ -140,7 +150,7 @@ void GameOver(Player* player)
             case SDL_EVENT_MOUSE_BUTTON_UP:
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
-                    if (leaveButton->isSelected)
+                    if (leaveButton->isSelected) //returns to title scene
                     {
                         FadeTransition(false, 800);
                         return;
@@ -151,72 +161,39 @@ void GameOver(Player* player)
         SDL_RenderClear(renderer);
 
         finalStatsBox->draw();
+        if (!victory) //if player died
+        {
+            RenderText("YOU HAVE DIED", 410, 120, fontSize, font, textColour, 60);
 
-        SDL_Surface* surfaceDied = TTF_RenderText_Solid(font, "YOU HAVE DIED", 14, textColour);
-        SDL_Texture* textureDied = SDL_CreateTextureFromSurface(renderer, surfaceDied);
-        SDL_FRect textRectDied = { 410,120,fontSize * 14,60 };
-        SDL_RenderTexture(renderer, textureDied, NULL, &textRectDied);
-        SDL_DestroySurface(surfaceDied);
-        SDL_DestroyTexture(textureDied);
+        }
+        else //if player won
+        {
+            RenderText("YOU HAVE SLAIN", 400, 120, fontSize, font, textColour, 60);
+            RenderText("THE DRAGON", 460, 180, fontSize, font, textColour, 60);
+
+
+        }
 
         leaveButton->draw();
-        SDL_Surface* surfaceLeave = TTF_RenderText_Solid(font, "LEAVE", 6, textColour);
-        SDL_Texture* textureLeave = SDL_CreateTextureFromSurface(renderer, surfaceLeave);
-        SDL_FRect textRectLeave = { 757,582,fontSize * 3,32 };
-        SDL_RenderTexture(renderer, textureLeave, NULL, &textRectLeave);
-        SDL_DestroySurface(surfaceLeave);
-        SDL_DestroyTexture(textureLeave);
 
-        stat = "FINAL STATS:";
-        SDL_Surface* surfacePointsRemaining = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-        SDL_Texture* texturePointsRemaining = SDL_CreateTextureFromSurface(renderer, surfacePointsRemaining);
-        SDL_FRect textRectPointsRemaining = { 410,250,fontSize * stat.length() / 2,32 };
-        SDL_RenderTexture(renderer, texturePointsRemaining, NULL, &textRectPointsRemaining);
-        SDL_DestroySurface(surfacePointsRemaining);
-        SDL_DestroyTexture(texturePointsRemaining);
+        RenderText("LEAVE", 757, 582, fontSize/2, font, textColour, 32);
 
-        stat = "CLASS:    " + player->getCharacterClass();
-        SDL_Surface* surfaceClass = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-        SDL_Texture* textureClass = SDL_CreateTextureFromSurface(renderer, surfaceClass);
-        SDL_FRect textRectClass = { 410,300,fontSize * stat.length() / 2,32 };
-        SDL_RenderTexture(renderer, textureClass, NULL, &textRectClass);
-        SDL_DestroySurface(surfaceClass);
-        SDL_DestroyTexture(textureClass);
+        RenderText("FINAL STATS:", 410, 250, fontSize/2, font, textColour, 32);
 
-        stat = "HEALTH:   " + std::to_string(player->getMaxHealth());
-        SDL_Surface* surfaceHealth = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-        SDL_Texture* textureHealth = SDL_CreateTextureFromSurface(renderer, surfaceHealth);
-        SDL_FRect textRectHealth = { 410,350,fontSize * stat.length() / 2,32 };
-        SDL_RenderTexture(renderer, textureHealth, NULL, &textRectHealth);
-        SDL_DestroySurface(surfaceHealth);
-        SDL_DestroyTexture(textureHealth);
+        RenderText("CLASS:    " + player->getCharacterClass(), 410, 300, fontSize/2, font, textColour, 32);
 
 
-        stat = "STRENGTH: " + std::to_string(player->getStrength());
-        SDL_Surface* surfaceStrength = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-        SDL_Texture* textureStrength = SDL_CreateTextureFromSurface(renderer, surfaceStrength);
-        SDL_FRect textRectStrength = { 410,400,fontSize * stat.length() / 2,32 };
-        SDL_RenderTexture(renderer, textureStrength, NULL, &textRectStrength);
-        SDL_DestroySurface(surfaceStrength);
-        SDL_DestroyTexture(textureStrength);
+        RenderText("LEVEL:    " + std::to_string(player->getLevel()), 410, 350, fontSize/2, font, textColour, 32);
+
+        RenderText("HEALTH:   " + std::to_string(player->getMaxHealth()), 410, 400, fontSize/2, font, textColour, 32);
+
+        RenderText("STRENGTH: " + std::to_string(player->getStrength()), 410, 450, fontSize/2, font, textColour, 32);
 
 
-        stat = "AGILITY:  " + std::to_string(player->getAgility());
-        SDL_Surface* surfaceAgility = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-        SDL_Texture* textureAgility = SDL_CreateTextureFromSurface(renderer, surfaceAgility);
-        SDL_FRect textRectAgility = { 410,450,fontSize * stat.length() / 2,32 };
-        SDL_RenderTexture(renderer, textureAgility, NULL, &textRectAgility);
-        SDL_DestroySurface(surfaceAgility);
-        SDL_DestroyTexture(textureAgility);
+        RenderText("AGILITY:  " + std::to_string(player->getAgility()), 410, 500, fontSize/2, font, textColour, 32);
 
 
-        stat = "LUCK:     " + std::to_string(player->getLuck());
-        SDL_Surface* surfaceLuck = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-        SDL_Texture* textureLuck = SDL_CreateTextureFromSurface(renderer, surfaceLuck);
-        SDL_FRect textRectLuck = { 410,500,fontSize * stat.length() / 2,32 };
-        SDL_RenderTexture(renderer, textureLuck, NULL, &textRectLuck);
-        SDL_DestroySurface(surfaceLuck);
-        SDL_DestroyTexture(textureLuck);
+        RenderText("LUCK:     " + std::to_string(player->getLuck()), 410, 550, fontSize/2, font, textColour, 32);
 
         mouse->draw();
         if (fadeIn)
@@ -289,15 +266,15 @@ void Battle(Player* player, Enemy* enemy)
 
                     if (attackButton->isSelected)
                     {
-                        int dodge = rand() % 100;
+                        int dodge = rand() % 100; //generate dodge and critHit numbers
                         int critHit = rand() % 100;
-                        if (dodge < enemy->getAgility())
+                        if (dodge < enemy->getAgility()) //enemy takes no damage
                         {
 
                         }
-                        else
+                        else //enemy takes damage
                         {
-                            if (critHit < player->getLuck())
+                            if (critHit < player->getLuck()) //player deals critical hit
                             {
                                 enemy->setHealthPoints(enemy->getHealthPoints() - player->getStrengthPoints()*1.7);
                             }
@@ -309,19 +286,19 @@ void Battle(Player* player, Enemy* enemy)
                         std::cout << enemy->getHealthPoints() << enemy->getName() << currentFloor << std::endl;
                         if (enemy->getHealthPoints() <= 0)
                         {
-                            player->gainXp(enemy->getGiveXp());
+                            player->gainXp(enemy->getGiveXp()); //player gains xp after defeating enemy
                             FadeTransition(false, 800);
                             return;
                         }
                         dodge = rand() % 100;
                         critHit = rand() % 100;
-                        if (dodge < player->getAgility())
+                        if (dodge < player->getAgility()) //player takes no damage
                         {
 
                         }
                         else
                         {
-                            if (critHit < enemy->getLuck())
+                            if (critHit < enemy->getLuck()) // enemy hits player with critical hit
                             {
                                 player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints() * 1.7);
                             }
@@ -330,10 +307,10 @@ void Battle(Player* player, Enemy* enemy)
                                 player->setHealthPoints(player->getHealthPoints() - enemy->getStrengthPoints());
                             }
                         }
-                        if (player->getHealthPoints() <= 0)
+                        if (player->getHealthPoints() <= 0) //player dies and goes to game over scene
                         {
                             FadeTransition(false, 800);
-                            GameOver(player);
+                            GameOver(player, false);
                             return;
                         }
                     }
@@ -344,11 +321,17 @@ void Battle(Player* player, Enemy* enemy)
                     if (runButton->isSelected)
                     {
                         int random = rand() % 3;
-                        if (random == 0)
+                        if (random == 0) //player has a chance to take 15% of max health as damage
                         {
-
+                            player->setHealthPoints(player->getHealthPoints() - player->getMaxHealthPoints() * 0.15);
+                            if (player->getHealthPoints() <= 0) //player dies and goes to game over scene
+                            {
+                                FadeTransition(false, 800);
+                                GameOver(player, false);
+                                return;
+                            }
                         }
-                        else
+                        else //player successfully escapes
                         {
                             FadeTransition(false, 800);
                             return;
@@ -364,44 +347,18 @@ void Battle(Player* player, Enemy* enemy)
         actionsBox->draw();
 
         attackButton->draw();
-        SDL_Surface* surfaceFight = TTF_RenderText_Solid(font, "ATTACK", 7, textColour);
-        SDL_Texture* textureFight = SDL_CreateTextureFromSurface(renderer, surfaceFight);
-        SDL_FRect textRectFight = { 225,575,fontSize * 7,60 };
-        SDL_RenderTexture(renderer, textureFight, NULL, &textRectFight);
-        SDL_DestroySurface(surfaceFight);
-        SDL_DestroyTexture(textureFight);
+        RenderText("ATTACK", 225, 575, fontSize, font, textColour, 60);
+
 
         itemButton->draw();
-        SDL_Surface* surfaceRun = TTF_RenderText_Solid(font, "ITEM", 4, textColour);
-        SDL_Texture* textureRun = SDL_CreateTextureFromSurface(renderer, surfaceRun);
-        SDL_FRect textRectRun = { 570,575,fontSize * 4,60 };
-        SDL_RenderTexture(renderer, textureRun, NULL, &textRectRun);
-        SDL_DestroySurface(surfaceRun);
-        SDL_DestroyTexture(textureRun);
+        RenderText("ITEM", 570, 575, fontSize, font, textColour, 60);
 
         runButton->draw();
-        SDL_Surface* surfaceRest = TTF_RenderText_Solid(font, "RUN", 3, textColour);
-        SDL_Texture* textureRest = SDL_CreateTextureFromSurface(renderer, surfaceRest);
-        SDL_FRect textRectRest = { 890,575,fontSize * 3,60 };
-        SDL_RenderTexture(renderer, textureRest, NULL, &textRectRest);
-        SDL_DestroySurface(surfaceRest);
-        SDL_DestroyTexture(textureRest);
+        RenderText("RUN", 890, 575, fontSize, font, textColour, 60);
 
-        health = std::to_string(player->getHealthPoints()) + "/" + std::to_string(player->getMaxHealthPoints());
-        SDL_Surface* surfacePlayerHealth = TTF_RenderText_Solid(font, health.c_str(), health.length(), healthTextColour);
-        SDL_Texture* texturePlayerHealth = SDL_CreateTextureFromSurface(renderer, surfacePlayerHealth);
-        SDL_FRect textRectPlayerHealth = { 225,275,fontSize * health.length()/2,32};
-        SDL_RenderTexture(renderer, texturePlayerHealth, NULL, &textRectPlayerHealth);
-        SDL_DestroySurface(surfacePlayerHealth);
-        SDL_DestroyTexture(texturePlayerHealth);
+        RenderText(std::to_string(player->getHealthPoints()) + "/" + std::to_string(player->getMaxHealthPoints()), 225, 275, fontSize/2, font, textColour, 32);
 
-        health = std::to_string(enemy->getHealthPoints()) + "/" + std::to_string(enemy->getMaxHealthPoints());
-        SDL_Surface* surfaceEnemyHealth = TTF_RenderText_Solid(font, health.c_str(), health.length(), healthTextColour);
-        SDL_Texture* textureEnemyHealth = SDL_CreateTextureFromSurface(renderer, surfaceEnemyHealth);
-        SDL_FRect textRectEnemyHealth = { 225,100,fontSize * health.length() / 2,32 };
-        SDL_RenderTexture(renderer, textureEnemyHealth, NULL, &textRectEnemyHealth);
-        SDL_DestroySurface(surfaceEnemyHealth);
-        SDL_DestroyTexture(textureEnemyHealth);
+        RenderText(std::to_string(enemy->getHealthPoints()) + "/" + std::to_string(enemy->getMaxHealthPoints()), 225, 100, fontSize/2, font, textColour, 32);
 
         mouse->draw();
 
@@ -414,7 +371,7 @@ void Battle(Player* player, Enemy* enemy)
     }
 }
 
-Enemy* GetEnemy(Enemy* enemy)
+Enemy* GetEnemy(Enemy* enemy) //returns a random enemy based on currentFloor
 {
     int random = rand() % 10;
     SDL_DestroyTexture(enemy->texture);
@@ -562,9 +519,9 @@ Enemy* GetEnemy(Enemy* enemy)
         }
         break;
     }
-    enemy->setMaxHealthPoints(enemy->getMaxHealth());
-    enemy->setHealthPoints(enemy->getMaxHealthPoints());
-    enemy->setStrengthPoints(enemy->getStrength());
+    enemy->setMaxHealthPoints(enemy->getMaxHealth()); //maxHealthPoints is the actual hp value used in combat maxHealth is just the stat points the enemy has
+    enemy->setHealthPoints(enemy->getMaxHealthPoints()); //same as maxHealthPoints and maxHealth
+    enemy->setStrengthPoints(enemy->getStrength()); //same as maxHealthPoints and maxHealth
     return enemy;
 }
 
@@ -614,6 +571,13 @@ void Game(Player* player)
     quitButton->drect.h = 52;
     quitButton->drect.w = 150;
 
+    Button* showCurrentFloor = new Button();
+    showCurrentFloor->srect.y = 0;
+    showCurrentFloor->drect.x = 20;
+    showCurrentFloor->drect.y = 100;
+    showCurrentFloor->drect.h = 52;
+    showCurrentFloor->drect.w = 180;
+
     Button* previousFloorButton = new Button();
     previousFloorButton->srect.y = 0;
     previousFloorButton->drect.x = 200;
@@ -632,20 +596,6 @@ void Game(Player* player)
     box->srect.y = 0;
     box->drect.x = 200;
     box->drect.y = 10;
-    Button* knight = new Button();
-    knight->srect.y = 0;
-    knight->drect.x = 350;
-    knight->drect.y = 200;
-
-    Button* archer = new Button();
-    archer->srect.y = 0;
-    archer->drect.x = 350;
-    archer->drect.y = 300;
-
-    Button* fighter = new Button();
-    fighter->srect.y = 0;
-    fighter->drect.x = 350;
-    fighter->drect.y = 400;
 
     PlusStatButton* plusHealth = new PlusStatButton();
     plusHealth->srect.y = 0;
@@ -679,6 +629,7 @@ void Game(Player* player)
     plusLuck->srect.y = 0;
     plusLuck->drect.x = 450;
     plusLuck->drect.y = 500;
+
     MinusStatButton* minusLuck = new MinusStatButton();
     minusLuck->srect.y = 0;
     minusLuck->drect.x = 498;
@@ -704,6 +655,7 @@ void Game(Player* player)
     bool pointsShown = false;
     std::string statPoints;
     std::string stat;
+    std::string currentFloorText;
 
     Enemy* enemy = new Enemy();
     enemy->srect.y = 0;
@@ -760,11 +712,11 @@ void Game(Player* player)
         {
             canGoToFloor = true;
         }
-        if (canGoToFloor || currentFloor < highestFloor)
+        if (canGoToFloor || currentFloor < highestFloor) //only let the player go to the next floor if they have met the correct conditions
         {
             nextFloorButton->update(*mouse);
         }
-        if (currentFloor > 1)
+        if (currentFloor > 1) //player can go to previous floor at any time unless they are on floor 1 as there is no floor 0
         {
             previousFloorButton->update(*mouse);
         }
@@ -789,9 +741,9 @@ void Game(Player* player)
                     }
                     else
                     {
-                        if (player->getStatPoints() == 0)
+                        if (player->getStatPoints() == 0) //if player has no stat points to allocate then continue with game
                         {
-                            if (fightButton->isSelected)
+                            if (fightButton->isSelected) // player enters combat
                             {
                                 std::cout << "fight" << std::endl;
                                 FadeTransition(false, 800);
@@ -805,7 +757,7 @@ void Game(Player* player)
                                 enemy = GetEnemy(enemy);
                                 std::cout << enemy->getName() << std::endl;
                             }
-                            if (runButton->isSelected)
+                            if (runButton->isSelected) // player has a chance to take 15% of health as damage if they run from an enemy
                             {
                                 int random = rand() % 3;
                                 if (random == 0)
@@ -817,14 +769,14 @@ void Game(Player* player)
                                         std::cout << "dead" << std::endl;
 
                                         FadeTransition(false, 800);
-                                        GameOver(player);
+                                        GameOver(player, false);
                                         return;
                                     }
                                 }
                                 actionsOnFloorTaken++;
                                 enemy = GetEnemy(enemy);
                             }
-                            if (restButton->isSelected)
+                            if (restButton->isSelected) //the player can rest to fully heal their character
                             {
                                 player->setHealthPoints(player->getMaxHealthPoints());
                                 FadeTransition(false, 800);
@@ -835,7 +787,7 @@ void Game(Player* player)
                                 enemy = GetEnemy(enemy);
                             }
                         }
-                        else
+                        else //make player allocate remaining stat points when they level up
                         {
                             if (plusHealth->isSelected && player->getStatPoints() > 0)
                             {
@@ -936,136 +888,75 @@ void Game(Player* player)
         {
             dungeonRoom->draw();
 
-            if (player->getStatPoints() > 0)
+            if (player->getStatPoints() > 0) //only show when player has stat points to allocate
             {
                 box->draw();
                 done->draw();
-                SDL_Surface* surfaceDone = TTF_RenderText_Solid(font, "DONE", 4, textColour);
-                SDL_Texture* textureDone = SDL_CreateTextureFromSurface(renderer, surfaceDone);
-                SDL_FRect textRectDone = { 595,547,fontSize * 3,48 };
-                SDL_RenderTexture(renderer, textureDone, NULL, &textRectDone);
-                SDL_DestroySurface(surfaceDone);
-                SDL_DestroyTexture(textureDone);
-                SDL_Surface* surfaceLevelUp = TTF_RenderText_Solid(font, "LEVEL UP", 9, textColour);
-                SDL_Texture* textureLevelUp = SDL_CreateTextureFromSurface(renderer, surfaceLevelUp);
-                SDL_FRect textRectLevelUp = { 250,100,fontSize * 9,60 };
-                SDL_RenderTexture(renderer, textureLevelUp, NULL, &textRectLevelUp);
-                SDL_DestroySurface(surfaceLevelUp);
-                SDL_DestroyTexture(textureLevelUp);
 
-                SDL_Surface* surfaceAllocatePoints = TTF_RenderText_Solid(font, "ALLOCATE POINTS", 16, textColour);
-                SDL_Texture* textureAllocatePoints = SDL_CreateTextureFromSurface(renderer, surfaceAllocatePoints);
-                SDL_FRect textRectAllocatePoints = { 250,180,fontSize * 15/1.5,48 };
-                SDL_RenderTexture(renderer, textureAllocatePoints, NULL, &textRectAllocatePoints);
-                SDL_DestroySurface(surfaceAllocatePoints);
-                SDL_DestroyTexture(textureAllocatePoints);
+                RenderText("DONE", 580, 547, fontSize - 1, font, textColour, 48);
 
-                statPoints = "REMAINING POINTS: " + std::to_string(player->getStatPoints());
-                SDL_Surface* surfacePointsRemaining = TTF_RenderText_Solid(font, statPoints.c_str(), statPoints.length(), textColour);
-                SDL_Texture* texturePointsRemaining = SDL_CreateTextureFromSurface(renderer, surfacePointsRemaining);
-                SDL_FRect textRectPointsRemaining = { 250,300,fontSize * statPoints.length() / 2,32 };
-                SDL_RenderTexture(renderer, texturePointsRemaining, NULL, &textRectPointsRemaining);
-                SDL_DestroySurface(surfacePointsRemaining);
-                SDL_DestroyTexture(texturePointsRemaining);
 
-                stat = "HEALTH:   " + std::to_string(player->getMaxHealth());
-                SDL_Surface* surfaceHealth = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-                SDL_Texture* textureHealth = SDL_CreateTextureFromSurface(renderer, surfaceHealth);
-                SDL_FRect textRectHealth = { 250,350,fontSize * stat.length() / 2,32 };
-                SDL_RenderTexture(renderer, textureHealth, NULL, &textRectHealth);
-                SDL_DestroySurface(surfaceHealth);
-                SDL_DestroyTexture(textureHealth);
+                RenderText("ALLOCATE POINTS", 250, 100, fontSize - 1, font, textColour, 60);
+
+
+                RenderText("REMAINING POINTS: " + std::to_string(player->getStatPoints()), 250, 300, fontSize / 2, font, textColour, 32);
+
+                RenderText("HEALTH:   " + std::to_string(player->getMaxHealth()), 250, 350, fontSize / 2, font, textColour, 32);
+
                 plusHealth->draw();
                 minusHealth->draw();
 
-                stat = "STRENGTH: " + std::to_string(player->getStrength());
-                SDL_Surface* surfaceStrength = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-                SDL_Texture* textureStrength = SDL_CreateTextureFromSurface(renderer, surfaceStrength);
-                SDL_FRect textRectStrength = { 250,400,fontSize * stat.length() / 2,32 };
-                SDL_RenderTexture(renderer, textureStrength, NULL, &textRectStrength);
-                SDL_DestroySurface(surfaceStrength);
-                SDL_DestroyTexture(textureStrength);
+                RenderText("STRENGTH: " + std::to_string(player->getStrength()), 250, 400, fontSize / 2, font, textColour, 32);
+
                 plusStrength->draw();
                 minusStrength->draw();
 
-                stat = "AGILITY:  " + std::to_string(player->getAgility());
-                SDL_Surface* surfaceAgility = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-                SDL_Texture* textureAgility = SDL_CreateTextureFromSurface(renderer, surfaceAgility);
-                SDL_FRect textRectAgility = { 250,450,fontSize * stat.length() / 2,32 };
-                SDL_RenderTexture(renderer, textureAgility, NULL, &textRectAgility);
-                SDL_DestroySurface(surfaceAgility);
-                SDL_DestroyTexture(textureAgility);
+                RenderText("AGILITY:  " + std::to_string(player->getAgility()), 250, 450, fontSize / 2, font, textColour, 32);
+
                 plusAgility->draw();
                 minusAgility->draw();
 
-                stat = "LUCK:     " + std::to_string(player->getLuck());
-                SDL_Surface* surfaceLuck = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-                SDL_Texture* textureLuck = SDL_CreateTextureFromSurface(renderer, surfaceLuck);
-                SDL_FRect textRectLuck = { 250,500,fontSize * stat.length() / 2,32 };
-                SDL_RenderTexture(renderer, textureLuck, NULL, &textRectLuck);
-                SDL_DestroySurface(surfaceLuck);
-                SDL_DestroyTexture(textureLuck);
+                RenderText("LUCK:     " + std::to_string(player->getLuck()), 250, 500, fontSize / 2, font, textColour, 32);
+
                 plusLuck->draw();
                 minusLuck->draw();
             }
-            else
+            else //show when player has no stat points to allocate
             {
                 enemy->draw();
 
                 actionsBox->draw();
 
                 fightButton->draw();
-                SDL_Surface* surfaceFight = TTF_RenderText_Solid(font, "FIGHT", 5, textColour);
-                SDL_Texture* textureFight = SDL_CreateTextureFromSurface(renderer, surfaceFight);
-                SDL_FRect textRectFight = { 245,575,fontSize * 5,60 };
-                SDL_RenderTexture(renderer, textureFight, NULL, &textRectFight);
-                SDL_DestroySurface(surfaceFight);
-                SDL_DestroyTexture(textureFight);
+                RenderText("FIGHT", 245, 575, fontSize, font, textColour, 60);
+
 
                 runButton->draw();
-                SDL_Surface* surfaceRun = TTF_RenderText_Solid(font, "RUN", 3, textColour);
-                SDL_Texture* textureRun = SDL_CreateTextureFromSurface(renderer, surfaceRun);
-                SDL_FRect textRectRun = { 580,575,fontSize * 3,60 };
-                SDL_RenderTexture(renderer, textureRun, NULL, &textRectRun);
-                SDL_DestroySurface(surfaceRun);
-                SDL_DestroyTexture(textureRun);
+                RenderText("RUN", 580, 575, fontSize, font, textColour, 60);
+
 
                 restButton->draw();
-                SDL_Surface* surfaceRest = TTF_RenderText_Solid(font, "REST", 4, textColour);
-                SDL_Texture* textureRest = SDL_CreateTextureFromSurface(renderer, surfaceRest);
-                SDL_FRect textRectRest = { 870,575,fontSize * 4,60 };
-                SDL_RenderTexture(renderer, textureRest, NULL, &textRectRest);
-                SDL_DestroySurface(surfaceRest);
-                SDL_DestroyTexture(textureRest);
+                RenderText("REST", 870, 575, fontSize, font, textColour, 60);
+
+                showCurrentFloor->draw();
+                RenderText("CURRENT FLOOR: " + std::to_string(currentFloor), 45, 120, fontSize/4, font, textColour, 16);
 
                 if (currentFloor > 1)
                 {
                     previousFloorButton->draw();
-                    SDL_Surface* surfacePreviousFloor = TTF_RenderText_Solid(font, "PREVIOUS FLOOR", 15, textColour);
-                    SDL_Texture* texturePreviousFloor = SDL_CreateTextureFromSurface(renderer, surfacePreviousFloor);
-                    SDL_FRect textRectPreviousFloor = { 230,40,fontSize * 15 / 4, 16 };
-                    SDL_RenderTexture(renderer, texturePreviousFloor, NULL, &textRectPreviousFloor);
-                    SDL_DestroySurface(surfacePreviousFloor);
-                    SDL_DestroyTexture(texturePreviousFloor);
+                    RenderText("PREVIOUS FLOOR", 230, 40, fontSize/4, font, textColour, 16);
+
                 }
                 if (canGoToFloor || currentFloor < highestFloor)
                 {
                     nextFloorButton->draw();
-                    SDL_Surface* surfaceNextFloor = TTF_RenderText_Solid(font, "NEXT FLOOR", 10, textColour);
-                    SDL_Texture* textureNextFloor = SDL_CreateTextureFromSurface(renderer, surfaceNextFloor);
-                    SDL_FRect textRectNextFloor = { 435,35,fontSize * 10 / 3, 24 };
-                    SDL_RenderTexture(renderer, textureNextFloor, NULL, &textRectNextFloor);
-                    SDL_DestroySurface(surfaceNextFloor);
-                    SDL_DestroyTexture(textureNextFloor);
+                    RenderText("NEXT FLOOR", 435, 35, fontSize/3, font, textColour, 24);
+
                 }
             }
             quitButton->draw();
-            SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "QUIT", 4, textColour);
-            SDL_Texture* textureQuit = SDL_CreateTextureFromSurface(renderer, surfaceQuit);
-            SDL_FRect textRectQuit = { 65,32,fontSize * 2,32 };
-            SDL_RenderTexture(renderer, textureQuit, NULL, &textRectQuit);
-            SDL_DestroySurface(surfaceQuit);
-            SDL_DestroyTexture(textureQuit);
+            RenderText("QUIT", 65, 32, fontSize/2, font, textColour, 32);
+
 
             if (fadeIn)
             {
@@ -1210,7 +1101,7 @@ void CreateCharacterScreen()
             case SDL_EVENT_MOUSE_BUTTON_UP:
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
-                    if (!allocatePoints)
+                    if (!allocatePoints) //sets the players stat points when they choose a class also stops checking if the button is pressed when they aren't being rendered
                     {
                         if (knight->isSelected)
                         {
@@ -1252,17 +1143,19 @@ void CreateCharacterScreen()
                             player->setHealthPoints(player->getMaxHealthPoints());
                             player->setStrengthPoints(player->getStrength());
                             FadeTransition(false, 800);
+                            currentFloor = 1;
+                            highestFloor = 1; //if player quits or dies they restart from floor 1
                             Game(player);
                             return;
                         }
 
-                        if (plusHealth->isSelected && player->getStatPoints() > 0)
+                        if (plusHealth->isSelected && player->getStatPoints() > 0) 
                         {
                             player->setMaxHealth(player->getMaxHealth() + 1);
                             player->setStatPoints(player->getStatPoints() - 1);
                             std::cout << player->getStatPoints() << std::endl;
                         }
-                        if (minusHealth->isSelected && originalStats.maxHealth < player->getMaxHealth())
+                        if (minusHealth->isSelected && originalStats.maxHealth < player->getMaxHealth()) //player can't decrease their stats below what they were when allocating new stat points
                         {
                             player->setMaxHealth(player->getMaxHealth() - 1);
                             player->setStatPoints(player->getStatPoints() + 1);
@@ -1322,107 +1215,53 @@ void CreateCharacterScreen()
         entranceImg->draw();
         box->draw();
         back->draw();
-        SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "BACK", 4, textColour);
-        SDL_Texture* textureQuit = SDL_CreateTextureFromSurface(renderer, surfaceQuit);
-        SDL_FRect textRectQuit = { 970,575,fontSize * 4,60 };
-        SDL_RenderTexture(renderer, textureQuit, NULL, &textRectQuit);
-        SDL_DestroySurface(surfaceQuit);
-        SDL_DestroyTexture(textureQuit);
-        if (!allocatePoints)
+
+        RenderText("BACK", 970, 575, fontSize, font, textColour,60);
+        if (!allocatePoints) //once the player has chosen a class do not render this
         {
-            SDL_Surface* surfaceChooseClass = TTF_RenderText_Solid(font, "CHOOSE A CLASS", 15, textColour);
-            SDL_Texture* textureChooseClass = SDL_CreateTextureFromSurface(renderer, surfaceChooseClass);
-            SDL_FRect textRectChooseClass = { 250,100,fontSize * 15,60 };
-            SDL_RenderTexture(renderer, textureChooseClass, NULL, &textRectChooseClass);
-            SDL_DestroySurface(surfaceChooseClass);
-            SDL_DestroyTexture(textureChooseClass);
+
+            RenderText("CHOOSE A CLASS", 250, 100, fontSize, font, textColour,60);
+
 
             knight->draw();
-            SDL_Surface* surfaceKnight = TTF_RenderText_Solid(font, "KNIGHT", 6, textColour);
-            SDL_Texture* textureKnight = SDL_CreateTextureFromSurface(renderer, surfaceKnight);
-            SDL_FRect textRectKnight = { 400,225,fontSize * 6,60 };
-            SDL_RenderTexture(renderer, textureKnight, NULL, &textRectKnight);
-            SDL_DestroySurface(surfaceKnight);
-            SDL_DestroyTexture(textureKnight);
+            RenderText("KNIGHT", 400, 225, fontSize, font, textColour,60);
 
             archer->draw();
-            SDL_Surface* surfaceArcher = TTF_RenderText_Solid(font, "ARCHER", 6, textColour);
-            SDL_Texture* textureArcher = SDL_CreateTextureFromSurface(renderer, surfaceArcher);
-            SDL_FRect textRectArcher = { 400,325,fontSize * 6,60 };
-            SDL_RenderTexture(renderer, textureArcher, NULL, &textRectArcher);
-            SDL_DestroySurface(surfaceArcher);
-            SDL_DestroyTexture(textureArcher);
+            RenderText("ARCHER", 400, 325, fontSize, font, textColour,60);
 
             fighter->draw();
-            SDL_Surface* surfaceBerserker = TTF_RenderText_Solid(font, "FIGHTER", 7, textColour);
-            SDL_Texture* textureBerserker = SDL_CreateTextureFromSurface(renderer, surfaceBerserker);
-            SDL_FRect textRectBerserker = { 385,425,fontSize * 7,60 };
-            SDL_RenderTexture(renderer, textureBerserker, NULL, &textRectBerserker);
-            SDL_DestroySurface(surfaceBerserker);
-            SDL_DestroyTexture(textureBerserker);
+            RenderText("FIGHTER", 385, 425, fontSize, font, textColour,60);
+
         }
-        else
+        else //only render this once the player has chosen a class
         {
             done->draw();
-            SDL_Surface* surfaceDone = TTF_RenderText_Solid(font, "DONE", 4, textColour);
-            SDL_Texture* textureDone = SDL_CreateTextureFromSurface(renderer, surfaceDone);
-            SDL_FRect textRectDone = { 595,547,fontSize * 3,48 };
-            SDL_RenderTexture(renderer, textureDone, NULL, &textRectDone);
-            SDL_DestroySurface(surfaceDone);
-            SDL_DestroyTexture(textureDone);
 
-            SDL_Surface* surfaceAllocatePoints = TTF_RenderText_Solid(font, "ALLOCATE POINTS", 16, textColour);
-            SDL_Texture* textureAllocatePoints = SDL_CreateTextureFromSurface(renderer, surfaceAllocatePoints);
-            SDL_FRect textRectAllocatePoints = { 250,100,fontSize * 15,60 };
-            SDL_RenderTexture(renderer, textureAllocatePoints, NULL, &textRectAllocatePoints);
-            SDL_DestroySurface(surfaceAllocatePoints);
-            SDL_DestroyTexture(textureAllocatePoints);
+            RenderText("DONE", 580, 547, fontSize-1, font, textColour,48);
 
-            statPoints = "REMAINING POINTS: " + std::to_string(player->getStatPoints());
-            SDL_Surface* surfacePointsRemaining = TTF_RenderText_Solid(font, statPoints.c_str(), statPoints.length(), textColour);
-            SDL_Texture* texturePointsRemaining = SDL_CreateTextureFromSurface(renderer, surfacePointsRemaining);
-            SDL_FRect textRectPointsRemaining = { 250,300,fontSize * statPoints.length() /2,32 };
-            SDL_RenderTexture(renderer, texturePointsRemaining, NULL, &textRectPointsRemaining);
-            SDL_DestroySurface(surfacePointsRemaining);
-            SDL_DestroyTexture(texturePointsRemaining);
 
-            stat = "HEALTH:   " + std::to_string(player->getMaxHealth());
-            SDL_Surface* surfaceHealth = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-            SDL_Texture* textureHealth = SDL_CreateTextureFromSurface(renderer, surfaceHealth);
-            SDL_FRect textRectHealth = { 250,350,fontSize * stat.length() / 2,32 };
-            SDL_RenderTexture(renderer, textureHealth, NULL, &textRectHealth);
-            SDL_DestroySurface(surfaceHealth);
-            SDL_DestroyTexture(textureHealth);
+            RenderText("ALLOCATE POINTS", 250, 100, fontSize-1, font, textColour,60);
+
+
+            RenderText("REMAINING POINTS: " + std::to_string(player->getStatPoints()), 250, 300, fontSize/2, font, textColour,32);
+
+            RenderText("HEALTH:   " + std::to_string(player->getMaxHealth()), 250, 350, fontSize/2, font, textColour,32);
+
             plusHealth->draw();
             minusHealth->draw();
 
-            stat = "STRENGTH: " + std::to_string(player->getStrength());
-            SDL_Surface* surfaceStrength = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-            SDL_Texture* textureStrength = SDL_CreateTextureFromSurface(renderer, surfaceStrength);
-            SDL_FRect textRectStrength = { 250,400,fontSize * stat.length() / 2,32 };
-            SDL_RenderTexture(renderer, textureStrength, NULL, &textRectStrength);
-            SDL_DestroySurface(surfaceStrength);
-            SDL_DestroyTexture(textureStrength);
+            RenderText("STRENGTH: " + std::to_string(player->getStrength()), 250, 400, fontSize/2, font, textColour,32);
+
             plusStrength->draw();
             minusStrength->draw();
 
-            stat = "AGILITY:  " + std::to_string(player->getAgility());
-            SDL_Surface* surfaceAgility = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-            SDL_Texture* textureAgility = SDL_CreateTextureFromSurface(renderer, surfaceAgility);
-            SDL_FRect textRectAgility = { 250,450,fontSize * stat.length() / 2,32 };
-            SDL_RenderTexture(renderer, textureAgility, NULL, &textRectAgility);
-            SDL_DestroySurface(surfaceAgility);
-            SDL_DestroyTexture(textureAgility);
+            RenderText("AGILITY:  " + std::to_string(player->getAgility()), 250, 450, fontSize/2, font, textColour,32);
+
             plusAgility->draw();
             minusAgility->draw();
 
-            stat = "LUCK:     " + std::to_string(player->getLuck());
-            SDL_Surface* surfaceLuck = TTF_RenderText_Solid(font, stat.c_str(), stat.length(), textColour);
-            SDL_Texture* textureLuck = SDL_CreateTextureFromSurface(renderer, surfaceLuck);
-            SDL_FRect textRectLuck = { 250,500,fontSize * stat.length() / 2,32 };
-            SDL_RenderTexture(renderer, textureLuck, NULL, &textRectLuck);
-            SDL_DestroySurface(surfaceLuck);
-            SDL_DestroyTexture(textureLuck);
+            RenderText("LUCK:     " + std::to_string(player->getLuck()), 250, 500, fontSize/2, font, textColour,32);
+
             plusLuck->draw();
             minusLuck->draw();
         }
@@ -1514,31 +1353,18 @@ int main()
         start->draw();
         options->draw();
         quit->draw();
-        SDL_Surface* surfaceStart = TTF_RenderText_Solid(font, "START", 5, textColour);
-        SDL_Texture* textureStart = SDL_CreateTextureFromSurface(renderer, surfaceStart);
-        SDL_FRect textRectStart = { 170,535,fontSize * 5,60 };
-        SDL_RenderTexture(renderer, textureStart, NULL, &textRectStart);
-        SDL_DestroySurface(surfaceStart);
-        SDL_DestroyTexture(textureStart);
-        SDL_Surface* surfaceOptions = TTF_RenderText_Solid(font, "OPTIONS", 7, textColour);
-        SDL_Texture* textureOptions = SDL_CreateTextureFromSurface(renderer, surfaceOptions);
-        SDL_FRect textRectOptions = { 525,535,fontSize * 7,60 };
-        SDL_RenderTexture(renderer, textureOptions, NULL, &textRectOptions);
-        SDL_DestroySurface(surfaceOptions);
-        SDL_DestroyTexture(textureOptions);
-        SDL_Surface* surfaceQuit = TTF_RenderText_Solid(font, "QUIT", 4, textColour);
-        SDL_Texture* textureQuit = SDL_CreateTextureFromSurface(renderer, surfaceQuit);
-        SDL_FRect textRectQuit = { 970,535,fontSize * 4,60 };
-        SDL_RenderTexture(renderer, textureQuit, NULL, &textRectQuit);
-        SDL_DestroySurface(surfaceQuit);
-        SDL_DestroyTexture(textureQuit);
+
+        RenderText("START", 170, 535, fontSize, font, textColour,60);
+        RenderText("OPTIONS", 525, 535, fontSize, font, textColour,60);
+        RenderText("QUIT", 970, 535, fontSize, font, textColour,60);
+
         mouse->draw();
         if (fadeIn)
         {
             FadeTransition(true, 800);
             fadeIn = false;
         }
-        SDL_Delay(16);
+        SDL_Delay(16); //limit the game to 60fps
     }
     SDL_DestroyWindow(window);
     TTF_Quit();
