@@ -39,6 +39,13 @@ During combat you can also land critical hits and dodges. The chances of these a
 ### Fight Enemy
 ![Fighting Enemy](SampleSceneImages/FightEnemy.png)
 
+## Expection Handling And Test Cases
+When creating the fade transition function I have made sure that the alpha value does not go above one or below zero. This is because the range is only limited to 0-255.
+The healthbar ratio cannot be above 1 or below zero or else it would cause issues when displaying it.
+All buttons have been tested to ensure they do what they need to.
+Buttons that have been created in the scene but are not rendered can't be clicked. This is done by having a flag to check whether they should take inputs or not.
+When the game opens it checks if SDL_tff is initialised and if not it exits the app
+
 ## Evaluation
 I have managed to create a turn-based RPG using SDL3. I was able to implement SDL_tff to display text and SDL_image to show images to the player.
 I have implemented OOP into the project by creating classes, using inheritance and encapsulation.
