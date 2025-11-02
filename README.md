@@ -30,10 +30,14 @@ When fighting the player always goes first.
 During combat you can also land critical hits and dodges. The chances of these are based on the stat points they have put into agility and luck. Agility increases the dodge chance and luck increases the critical hit rate. Critical hits deal x1.7 more damage
 
 ## Sample Screens
-![Choose Class]([Sample_Scene_Images/ChooseClass.png])
-![Allocate Stat Points](Sample_Scene_Images/AllocatePoints.png)
-![Apporached By Emeny](Sample_Scene_Images/ApproachEnemy.png)
-![Fighting Enemy](Sample_Scene_Images/FightEnemy.png)
+### Choose Class
+![Choose Class](SampleSceneImages/ChooseClass.png)
+### Allocate Points
+![Allocate Stat Points](SampleSceneImages/AllocatePoints.png)
+### Approached By Enemy
+![Apporached By Emeny](SampleSceneImages/ApproachEnemy.png)
+### Fight Enemy
+![Fighting Enemy](SampleSceneImages/FightEnemy.png)
 
 ## Evaluation
 I have managed to create a turn-based RPG using SDL3. I was able to implement SDL_tff to display text and SDL_image to show images to the player.
