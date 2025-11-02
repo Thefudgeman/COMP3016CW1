@@ -222,8 +222,14 @@ void RenderHealthBar(SDL_Renderer* renderer, int x, int y, int w, int h, float d
     if (!renderer || maxHP <= 0) return;
 
     float healthRatio = displayHP / maxHP;
-    if (healthRatio < 0.0f) healthRatio = 0.0f;
-    if (healthRatio > 1.0f) healthRatio = 1.0f;
+    if (healthRatio < 0.0f)
+    {
+        healthRatio = 0.0f;
+    }
+    if (healthRatio > 1.0f)
+    {
+        healthRatio = 1.0f;
+    }
 
     SDL_FRect border{ x - 2, y - 2, w + 4, h + 4 };
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
@@ -588,12 +594,6 @@ void Game(Player* player)
     minusLuck->drect.x = 498;
     minusLuck->drect.y = 500;
 
-    Button* done = new Button();
-    done->srect.y = 0;
-    done->drect.x = 530;
-    done->drect.y = 530;
-    done->drect.w = 225;
-    done->drect.h = 75;
     struct
     {
         int maxHealth;
@@ -650,7 +650,6 @@ void Game(Player* player)
                 plusLuck->update(*mouse);
                 minusLuck->update(*mouse);
 
-                done->update(*mouse);
             }
             else if (player->getStatPoints() == 0)
             {
@@ -713,15 +712,17 @@ void Game(Player* player)
                             }
                             if (runButton->isSelected) // player has a chance to take 15% of health as damage if they run from an enemy
                             {
+                                srand(time(NULL)); //stops random numbers appearing in same order when reloading game
                                 int random = rand() % 3;
                                 if (random == 0)
                                 {
                                     player->setHealthPoints(player->getHealthPoints() - player->getMaxHealthPoints() * 0.15);
 
-                                    if (player->getHealth() <= 0)
+                                    if (player->getHealthPoints() <= 0)
                                     {
                                         std::cout << "dead" << std::endl;
-
+                                        actionsOnFloorTaken = 0;
+                                        canGoToFloor = false;
                                         FadeTransition(false, 800);
                                         GameOver(player, false);
                                         return;
@@ -858,12 +859,9 @@ void Game(Player* player)
             if (player->getStatPoints() > 0) //only show when player has stat points to allocate
             {
                 box->draw();
-                done->draw();
+                RenderText("LEVEL UP", 250, 100, fontSize - 1, font, textColour, 60);
 
-                RenderText("DONE", 580, 547, fontSize - 1, font, textColour, 48);
-
-
-                RenderText("ALLOCATE POINTS", 250, 100, fontSize - 1, font, textColour, 60);
+                RenderText("ALLOCATE POINTS", 250, 170, fontSize - 1, font, textColour, 60);
 
 
                 RenderText("REMAINING POINTS: " + std::to_string(player->getStatPoints()), 250, 300, fontSize / 2, font, textColour, 32);
@@ -1275,6 +1273,7 @@ int main()
     quit->drect.x = 880;
     quit->drect.y = 510;
     bool running = true;
+
     if (!TTF_Init())
     {
         std::cout << "Error opening TTF" << std::endl;
