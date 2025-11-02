@@ -4,6 +4,7 @@
 #include <SDL3/sdl_image.h>
 #include <SDL3/SDL_ttf.h>
 #include <SDL3/SDL_surface.h>
+#include <vector>
 #include "Player.h"
 #include "Button.h"
 #include "Box.h"
@@ -371,157 +372,73 @@ void Battle(Player* player, Enemy* enemy)
     }
 }
 
-Enemy* GetEnemy(Enemy* enemy) //returns a random enemy based on currentFloor
+Enemy* GetEnemy(Enemy* oldEnemy)
 {
-    int random = rand() % 10;
-    SDL_DestroyTexture(enemy->texture);
-    switch (currentFloor) //optimise later
+    if (oldEnemy && oldEnemy->texture)
     {
-    case 1:
-        if (random < 5)
-        {
-            enemy = new Enemy(2, 1, 1, 1, 50, "Slime");
-
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(3, 3, 1, 1, 100, "Zombie");
-        }
-        else
-        {
-            enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
-        }
-        break;
-    case 2:
-        if (random < 5)
-        {
-            enemy = new Enemy(3, 3, 1, 1, 100, "Zombie");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
-        }
-        else
-        {
-            enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
-        }
-        break;
-    case 3:
-        if (random < 5)
-        {
-            enemy = new Enemy(4, 3, 2, 2, 150, "Skeleton");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
-        }
-        else
-        {
-            enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
-        }
-        break;
-    case 4:
-        if (random < 5)
-        {
-            enemy = new Enemy(4, 5, 5, 4, 250, "Goblin");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
-        }
-        else
-        {
-            enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
-        }
-        break;
-    case 5:
-        if (random < 5)
-        {
-            enemy = new Enemy(7, 5, 2, 4, 350, "Ogre");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
-        }
-        else
-        {
-            enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
-        }
-        break;
-    case 6:
-        if (random < 5)
-        {
-            enemy = new Enemy(13, 12, 7, 6, 500, "Minotaur");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
-        }
-        else
-        {
-            enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
-        }
-        break;
-    case 7:
-        if (random < 5)
-        {
-            enemy = new Enemy(10, 10, 15, 9, 600, "Griffin");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
-        }
-        else
-        {
-            enemy = new Enemy(16, 19, 13, 10, 1000, "Vampire");
-        }
-        break;
-    case 8:
-        if (random < 5)
-        {
-            enemy = new Enemy(12, 13, 13, 8, 800, "Wraith");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(16, 19, 13, 10, 1000, "Vampire");
-        }
-        else
-        {
-            enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
-        }
-        break;
-    case 9:
-        if (random < 5)
-        {
-            enemy = new Enemy(16, 19, 13, 10, 1000, "Vampire");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
-        }
-        else
-        {
-            enemy = new Enemy(25, 21, 19, 17, 1800, "Demon");
-        }
-        break;
-    case 10:
-        if (random < 5)
-        {
-            enemy = new Enemy(25, 15, 7, 11, 1300, "Golem");
-        }
-        else if (random > 4 && random < 8)
-        {
-            enemy = new Enemy(25, 21, 19, 17, 1800, "Demon");
-        }
-        else
-        {
-            enemy = new Enemy(40, 33, 21, 20, 2500, "Dragon");
-        }
-        break;
+        SDL_DestroyTexture(oldEnemy->texture);
     }
-    enemy->setMaxHealthPoints(enemy->getMaxHealth()); //maxHealthPoints is the actual hp value used in combat maxHealth is just the stat points the enemy has
-    enemy->setHealthPoints(enemy->getMaxHealthPoints()); //same as maxHealthPoints and maxHealth
-    enemy->setStrengthPoints(enemy->getStrength()); //same as maxHealthPoints and maxHealth
+
+    struct EnemyTemplate {
+        int hp, strength, agility, luck, xp;
+        const char* name;
+    };
+
+    static const std::vector<std::vector<EnemyTemplate>> floorEnemies = {
+        // Floor 1
+        { {2,1,1,1,50,"Slime"}, {3,3,1,1,100,"Zombie"}, {4,3,2,2,150,"Skeleton"} },
+        // Floor 2
+        { {3,3,1,1,100,"Zombie"}, {4,3,2,2,150,"Skeleton"}, {4,5,5,4,250,"Goblin"} },
+        // Floor 3
+        { {4,3,2,2,150,"Skeleton"}, {4,5,5,4,250,"Goblin"}, {7,5,2,4,350,"Ogre"} },
+        // Floor 4
+        { {4,5,5,4,250,"Goblin"}, {7,5,2,4,350,"Ogre"}, {13,12,7,6,500,"Minotaur"} },
+        // Floor 5
+        { {7,5,2,4,350,"Ogre"}, {13,12,7,6,500,"Minotaur"}, {10,10,15,9,600,"Griffin"} },
+        // Floor 6
+        { {13,12,7,6,500,"Minotaur"}, {10,10,15,9,600,"Griffin"}, {12,13,13,8,800,"Wraith"} },
+        // Floor 7
+        { {10,10,15,9,600,"Griffin"}, {12,13,13,8,800,"Wraith"}, {16,19,13,10,1000,"Vampire"} },
+        // Floor 8
+        { {12,13,13,8,800,"Wraith"}, {16,19,13,10,1000,"Vampire"}, {25,15,7,11,1300,"Golem"} },
+        // Floor 9
+        { {16,19,13,10,1000,"Vampire"}, {25,15,7,11,1300,"Golem"}, {25,21,19,17,1800,"Demon"} },
+        // Floor 10
+        { {25,15,7,11,1300,"Golem"}, {25,21,19,17,1800,"Demon"}, {40,33,21,20,2500,"Dragon"} }
+    };
+
+    int floorIndex = currentFloor - 1;
+    if (floorIndex < 0)
+    {
+        floorIndex = 0;
+    }
+    if (floorIndex >= (int)floorEnemies.size())
+    {
+        floorIndex = (int)floorEnemies.size() - 1;
+    }
+
+    int random = rand() % 10;
+    int index;
+    if (random < 5)
+    {
+        index = 0;
+    }
+    else if (random < 8)
+    {
+        index = 1;
+    }
+    else
+    {
+        index = 2;
+    }
+
+    const EnemyTemplate nextEnemy = floorEnemies[floorIndex][index];
+
+    Enemy* enemy = new Enemy(nextEnemy.hp, nextEnemy.strength, nextEnemy.agility, nextEnemy.luck, nextEnemy.xp, nextEnemy.name);
+    enemy->setMaxHealthPoints(enemy->getMaxHealth());
+    enemy->setHealthPoints(enemy->getMaxHealthPoints());
+    enemy->setStrengthPoints(enemy->getStrength());
+
     return enemy;
 }
 

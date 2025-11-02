@@ -106,9 +106,9 @@
               "Title": "COMP3016CW1.cpp",
               "DocumentMoniker": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp",
               "RelativeDocumentMoniker": "COMP3016CW1\\COMP3016CW1.cpp",
-              "ToolTip": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp*",
-              "RelativeToolTip": "COMP3016CW1\\COMP3016CW1.cpp*",
-              "ViewState": "AgIAABwEAAAAAAAAAAAAAN0DAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\theob\\Documents\\GitHub\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1\\COMP3016CW1.cpp",
+              "RelativeToolTip": "COMP3016CW1\\COMP3016CW1.cpp",
+              "ViewState": "AgIAAI0BAAAAAAAAAAAAwJ8BAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-24T14:31:04.72Z",
               "EditorCaption": ""
@@ -231,8 +231,7 @@
               "RelativeToolTip": "COMP3016CW1\\Player.h",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAwBIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-24T14:32:33.61Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-24T14:32:33.61Z"
             },
             {
               "$type": "Document",
